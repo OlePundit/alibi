@@ -15,14 +15,37 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function __construct(Product $product)
+
+    public function index(Request $request)
     {
-        $this->product = $product;
-        $this->authorizeResource(Product::class, 'product');
-    }
-    public function index()
-    {
-        return new ProductCollection(Product::paginate());
+        $query = Product::query();
+
+        $includeUsers = $request->query('includeUsers');
+
+        if ($includeUsers) {
+            $products = $query->with(['user'])->paginate();
+        } else {
+            $products = $query->paginate();
+        }
+    
+        // Filter by price range
+        $minPrice = $request->query('minPrice');
+        $maxPrice = $request->query('maxPrice');
+    
+        if ($minPrice !== null && $maxPrice !== null) {
+            $products = $query->whereBetween('price', [$minPrice, $maxPrice])->paginate();
+        }
+        //Filter by volume
+        $volume = $request->query('volume');
+        if($volume !== null){
+            $products = $query->where('volume',$volume)->paginate();
+        }
+        //Filter by stock
+        $stock = $request->query('stock');
+        if($stock !== null){
+            $query->where('stock',$stock)->paginate();
+        }
+        return new ProductCollection($products);
     }
 
     /**
