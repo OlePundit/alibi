@@ -8,6 +8,12 @@ import Users from "./views/users.jsx"
 import Admin from "./components/admin.jsx"
 import Products from './views/products.jsx';
 import Orders from './views/orders.jsx';
+import ProductDetail from './views/productdetail.jsx';
+import Checkout from './views/checkout.jsx';
+import ProductForm from './views/productform.jsx';
+import AdminProducts from './views/adminproducts.jsx';
+import UserForm from './views/userform.jsx';
+import UserUpdate from './views/userupdate.jsx';
 
 const router = createBrowserRouter([
     {
@@ -23,14 +29,35 @@ const router = createBrowserRouter([
             element: <Dashboard />
           },
           {
+            path: '/admin/product/new',
+            element: <ProductForm key="productCreate"/>
+          },
+          {
+            path: '/admin/product/:id',
+            element: <ProductForm key="productUpdate"/>
+          },
+          {
             path: '/admin/users',
             element: <Users />
+          },
+          {
+            path: '/admin/user/new',
+            element: <UserForm/>
+          },
+          
+          {
+            path: '/admin/user/:id',
+            element: <UserUpdate/>
           },
 
           {
             path: '/admin/orders',
             element: <Orders />
           },
+          {
+            path:'/admin/products',
+            element: <AdminProducts />
+          }
         ]
       },
 
@@ -39,9 +66,21 @@ const router = createBrowserRouter([
             element:<Index/>,
             children:[
                 {
-                    path: '/products',
-                    element: <Products />
-                  },
+                  path: '/',
+                  element: <Navigate to="/products" />
+                },
+                {
+                  path: '/products',
+                  element: <Products />
+                },
+                {
+                  path: '/product/detail/:id',
+                  element: <ProductDetail />
+                },
+                {
+                  path: '/checkout',
+                  element: <Checkout />
+                },
                 {
                     path: '/login',
                     element: <Login />

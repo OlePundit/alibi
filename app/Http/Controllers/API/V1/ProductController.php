@@ -6,9 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\Product;
+use App\Filters\V1\ProductFilter;
 use Illuminate\Http\Request;
 use App\Http\Resources\V1\ProductResource;
 use App\Http\Resources\V1\ProductCollection;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -16,37 +19,43 @@ class ProductController extends Controller
      * Display a listing of the resource.
      */
 
-    public function index(Request $request)
-    {
-        $query = Product::query();
+     public function index(Request $request)
+     {
+         $query = Product::query();
+     
+         // Filter by price range
+         $minPrice = $request->query('minPrice');
+         $maxPrice = $request->query('maxPrice');
+         if ($minPrice !== null && $maxPrice !== null) {
+             $query->whereBetween('price', [(int)$minPrice, (int)$maxPrice]);
+         }
+     
+         // Filter by volume
+         $volume = $request->query('volume');
+         if ($volume !== null) {
+             $query->where('volume', $volume);
+         }
+     
+         // Filter by stock
+         $stock = $request->query('stock');
+         if ($stock !== null) {
+             $query->where('stock', $stock);
+         }
+     
+         // Include users if requested
+         $includeUsers = $request->query('includeUsers');
+         if ($includeUsers) {
+             $query->with('user');
+         }
+     
+         // Paginate the results
+         $products = $query->paginate();
+         \Log::info('Request data:', $request->query());
+         \Log::info('SQL Query:', ['query' => $query->toSql(), 'bindings' => $query->getBindings()]);
 
-        $includeUsers = $request->query('includeUsers');
-
-        if ($includeUsers) {
-            $products = $query->with(['user'])->paginate();
-        } else {
-            $products = $query->paginate();
-        }
-    
-        // Filter by price range
-        $minPrice = $request->query('minPrice');
-        $maxPrice = $request->query('maxPrice');
-    
-        if ($minPrice !== null && $maxPrice !== null) {
-            $products = $query->whereBetween('price', [$minPrice, $maxPrice])->paginate();
-        }
-        //Filter by volume
-        $volume = $request->query('volume');
-        if($volume !== null){
-            $products = $query->where('volume',$volume)->paginate();
-        }
-        //Filter by stock
-        $stock = $request->query('stock');
-        if($stock !== null){
-            $query->where('stock',$stock)->paginate();
-        }
-        return new ProductCollection($products);
-    }
+         return new ProductCollection($products->appends($request->query()));
+     }
+     
 
     /**
      * Show the form for creating a new resource.
@@ -61,7 +70,28 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        return new ProductResource(Product::create($request->all()));
+        // Check if the request is authenticated
+        if (!Auth::check()) {
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        }
+        $user = Auth::user();
+        $file = $request->file('image');
+        $randomName = Str::random(10); // Adjust the length as needed
+    
+        // Get the current time to append to the filename
+        $currentTime = now()->format('YmdHis');
+    
+        // Get the file extension
+        $extension = 'png';
+        $imageName = $randomName . '_' . $currentTime . '.' . $extension;
+        $storedPath = $file->storeAs('uploads', $imageName, 'public');
+        $productData = $request->all();
+        $productData['user_id'] = $user->id;
+        $productData['image'] = $storedPath;
+        $product = Product::create($productData);
+
+
+        return new ProductResource($product);
     }
 
     /**
@@ -69,7 +99,20 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return new ProductResource($product);
+        $product->load('user'); // Eager load the 'user' relationship
+
+        $productCategory = $product->category;
+
+        // Retrieve similar jobs based on the category of the current job
+        $similarProducts = Product::where('category', $productCategory)
+        ->where('id', '!=', $product->id) // Exclude the current job
+        ->limit(6)
+        ->get();
+
+        return response()->json([
+            'currentProduct' => new ProductResource($product),
+            'similarProducts' => ProductResource::collection($similarProducts)
+        ]);
     }
 
     /**
@@ -85,14 +128,39 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, Product $product)
     {
-        $product->update($request->all());
-    }
+        try {
+            $data = $request->validated();
+            
+            // Handle image upload
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imageName = $image->getClientOriginalName(); // You may adjust this according to your naming convention
+                $imagePath = $image->storeAs('uploads', $imageName, 'public');
+                $data['image'] = $imagePath;
+
+                if($job->image){
+                    $absolutePath = public_path($job->image);
+                    File::delete($absolutePath);
+                }
+            }
+            
+            $product->update($data);
+            
+            return new ProductResource($product);
+        } catch (\Exception $e) {
+            // Log the error or return it as a response
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }    
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Product $product)
     {
-        //
+        $product->delete();
+
+        return response("", 204);
+
     }
 }

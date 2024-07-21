@@ -27,6 +27,7 @@ class ProductResource extends JsonResource
             'category'=>$this->category,
             'description'=>$this->description,
             'image'=>$this->image,
+            'discount'=>$this->discount,
             'user'=> new UserResource($this->user)
 
         ];

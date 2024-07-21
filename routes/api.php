@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\V1\ProductController;
 use App\Http\Controllers\API\V1\AuthController;
+use App\Http\Resources\V1\UserResource;
 
 
 /*
@@ -20,13 +21,15 @@ use App\Http\Controllers\API\V1\AuthController;
 Route::middleware('auth:sanctum')->group(function() {
 
     Route::get('/user', function (Request $request) {
-        return $request->user();
+        return new UserResource($request->user());
     });
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::apiResource('/users', AuthController::class);
+    Route::apiResource('/products', ProductController::class);
+    Route::post('/admin/users', [AuthController::class, 'createUser']);
+    Route::put('/admin/users/{user}', [AuthController::class, 'updateUser']);
 
 
 });
-Route::apiResource('/products', ProductController::class);
 Route::post('/signup', [AuthController::class, 'signup']);
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'login']);    
+Route::apiResource('/users', AuthController::class);

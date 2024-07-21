@@ -7,7 +7,7 @@ html, body, #root, #defaultLayout, #guestLayout {
     min-height: 100vh;
 }
 #root {
-  max-width: 1400px;
+  max-width: 100%;
   margin: 0 auto;
   padding: 0;
   text-align: center;
@@ -22,9 +22,21 @@ body {
     padding: 0;
     font-size: 14px;
     color: #212121;
-    background-color: #f6f6f6;
+    background:rgba(202, 240, 248, 0.5);
 }
 
+.navbar-nav form{
+    width:100%;
+}
+.mx-auto{
+    width:70%;
+}
+.react-tabs__tab--selected {
+    outline: none;
+    border-bottom: 2px solid #00a762;
+    border-radius: 8px;
+    padding: 2px 12px;
+}
 input {
     outline: 0;
     background: #ffffff;
@@ -40,7 +52,10 @@ input {
 input:focus {
     border-color: #5b08a7;
 }
+.icon-f{
+    width:30px;
 
+}
 .btn,
 .btn-add,
 .btn-edit,
@@ -108,7 +123,9 @@ table > thead > tr > th {
     padding: 0.5rem 0.5rem;
     background-color: #efefef;
 }
-
+.navbar .ms-auto button{
+    position: relative;
+}
 table > tbody > tr > td {
     padding: 0.5rem 0.5rem;
     border-bottom: 1px solid #efefef;
@@ -186,7 +203,9 @@ table > tbody > tr > td {
 #defaultLayout {
     display: flex;
 }
-
+#defaultLayout a{
+    text-decoration: none;
+}
 #defaultLayout aside {
     width: 240px;
     background-color: #5b08a7;
@@ -235,6 +254,9 @@ table > tbody > tr > td {
     -webkit-animation-name: fadeInDown;
     animation-name: fadeInDown;
 }
+.icon-s{
+    width:17px;
+}
 
 @keyframes fadeInDown {
     0% {
@@ -247,10 +269,14 @@ table > tbody > tr > td {
     }
 }
 
-.products ul{
+.products .categories{
   list-style-type: none;
   width:100%;
   padding-left: 0px;
+  background:#fff;
+  border-radius: 8px;
+  padding:10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
 }
 .products ul li{
   text-align: start;
@@ -261,18 +287,46 @@ table > tbody > tr > td {
 .products .product-wrap .card-body{
   padding:10px;
 }
+.products .product-wrap img{
+    height:200px;
+}
+.products .product-wrap a{
+    text-decoration:none;
+    color:#000;
+}
 .products .shopName{
   margin-top: 10px;
 }
 .products a{
   text-decoration: none;
 }
-.products .product-wrap{
-  border: 1px solid #aeaeae;
-  border-radius: 8px;
-  margin-right: 10px;
-  margin-bottom: 10px;
-  padding: 0px;
+.products .product-wrap {
+    background: #fff;
+    border-radius: 8px;
+    margin-right: 10px;
+    margin-bottom: 15px;
+    padding: 0px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+.products .filter-panel,.products .filter-panel .dropdown{
+    width:100%;
+}
+.products .filter-container .btn-add{
+    width:100%;
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left:10px;
+}
+.products .filter-container .btn-add span svg{
+    margin-right:7px;
+}
+.products .filter-wrap .btn-add{
+    width:100%;
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left:0px;
 }
 .slick-dots {
   position: relative!important;
@@ -310,13 +364,15 @@ table > tbody > tr > td {
 
 .tabs-and-slider-container {
   display: flex;
-  align-items: center;
+  align-items: start;
   flex-wrap: nowrap;
 }
 
 .tabs-container {
   flex: 1;
   max-width: 150px; /* Adjust as needed */
+  margin-right:10px;
+
 }
 
 .slider-container {
@@ -325,17 +381,273 @@ table > tbody > tr > td {
 }
 .filter-container {
   flex: 2; /* Adjust the flex value to control the width ratio */
-  overflow: hidden; /* Ensure the slider doesn't overflow */
-  max-width: 100px; /* Adjust as needed */
-
+  max-width: 200px; /* Adjust as needed */
 }
 
 .slider-container img{
   width:100%;
   object-fit: cover;
-  height:400px;
+  height:377px;
+  border-radius: 8px;
+  margin-top: 17px;
 }
 .slider-image-container {
   position: relative;
 }
 
+.filter-wrap{
+    width:250px;
+    padding:10px!important;
+}
+
+input[type="range"] {
+    --minRangePercent: 0%;
+    --maxRangePercent: 0%;
+    height: .4rem;
+}
+.horizontal-slider {
+    width: 100%;
+    max-width: 500px;
+    height: 50px;
+}
+.horizontal-slider .example-track {
+    top: 20px;
+    height: 10px;
+}
+.example-track.example-track-0 {
+    background: #e9e9e9;
+}
+
+.example-track.example-track-1 {
+    background: #00a762;
+}
+.example-track.example-track-2 {
+    background: #e9e9e9;
+}
+.horizontal-slider .example-thumb {
+    top: 12px;
+    width: 55px;
+    height: 25px;
+    line-height: 26px;
+    border-radius: 30%;
+}
+.example-thumb {
+    font-size: 0.7em;
+    text-align: center;
+    background-color: #818181;
+    color: white;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+.min-max-slider > input.min {
+    background-image: linear-gradient(
+    to right,
+    silver 0%,
+    silver var(--minRangePercent),
+    orange var(--minRangePercent),
+    orange 100%
+    );
+}
+    
+.min-max-slider > input.max {
+    background-image: linear-gradient(
+    to right,
+    orange 0%,
+    orange var(--maxRangePercent),
+    silver var(--maxRangePercent),
+    silver 100%
+    );
+}
+.example-thumb.active{
+    border:1px solid grey!important;
+}
+
+
+.product-detail img{
+    width:100%;
+    border-radius: 8px;
+    height:400px;
+    object-fit: cover;
+}
+.product-detail h1{
+    text-align: start;
+    margin-bottom: 20px;
+}
+.product-detail h2{
+    text-align: start;
+    margin-bottom: 20px;
+
+}
+.product-detail h5{
+    text-align: start;
+    margin-bottom: 15px;
+
+}
+.product-detail h4{
+    text-align: start;
+    margin-bottom: 20px;
+
+}
+.product-detail h5 span{
+    text-align: start;
+    background:#fff;
+    padding:3px 7px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
+    margin-left: 0px;
+}
+.product-detail p{
+    text-align: start;
+}
+.product-detail p span{
+    color:#00a762;
+}
+
+.product-detail span{
+    margin-left: 10px;
+}
+.product-detail .btn-add{
+    margin-right: 10px;
+}
+.product-detail .btn-add svg{
+    margin-right: 7px;
+}
+.product-detail .icon-s{
+    margin-right: 7px;
+}
+.product-detail .card{
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
+    border:none;
+}
+.product-detail .products span{
+    margin-left: 0px;
+}
+
+
+/* Cart.css */
+.cart {
+    position: fixed;
+    top: 0;
+    right: -25%;
+    width: 35%;
+    height: 100%;
+    background-color: white;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.5);
+    transition: right 0.3s ease;
+    z-index: 1000;
+    display: flex;
+    align-items:start;
+    flex-direction: column;
+    padding:10px;
+}
+.cart-badge {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    width: 15px;
+    height: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+}
+
+.cart input{
+    width:60px;
+    margin-left: 10px;
+}
+.cart button{
+    width:fit-content;
+    margin-left: 10px;
+    border: none;
+    border-radius: 8px;
+    padding: 3px 7px;
+
+}
+.cart ul{
+    list-style-type: none;
+    padding-left: 0;
+    padding-top: 15px;
+}
+.cart ul img{
+    border-radius: 6px;
+}
+.cart ul li{
+    list-style-type: none;
+    padding:0 10px;
+    justify-content: space-between;
+}
+.cart ul button{
+    margin-left: 10px;
+    height: fit-content;
+    border: none;
+    border-radius:8px;
+}
+.cart h4{
+    margin-left: 10px;
+}
+.cart p{
+    text-align: start;
+    padding-left: 10px;
+}
+.cart h2{
+    text-align: start;
+    padding-left: 10px;
+}
+.cart.open {
+    right: 0;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.checkout h2{
+    text-align: start;
+    padding-left: 0;
+
+}
+.checkout h3{
+    text-align: start;
+    padding-left: 0;
+}
+.checkout p{
+    text-align: start;
+    margin-left: 10px;
+}
+.checkout h4{
+    margin-left: 10px;
+}
+.checkout .card{
+    border:none!important;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.5);
+
+}
+.checkout ul{
+    padding-left: 0px;
+}
+.checkout ul img{
+    border-radius: 6px;
+}
+.checkout form h5{
+    text-align: start;
+}
+.checkout .phone-row{
+    padding-right: 0;
+}
+.checkout input[type=radio]{
+    width:12px;
+    margin-right: 10px;
+}
+.checkout .radio-wrap{
+    margin-right: 10px;
+}

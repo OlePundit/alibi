@@ -29,7 +29,8 @@ class StoreProductRequest extends FormRequest
             'price'=>'required',
             'category'=>'required',
             'description'=>'required',
-            'image'=>'required',
+            'discount'=>'',
+            'image'=>['required','file'],
             'user_id'=>''
         ];
     }

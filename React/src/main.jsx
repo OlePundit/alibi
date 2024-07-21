@@ -6,13 +6,17 @@ import './index.css';
 import { RouterProvider } from 'react-router-dom';
 import router from "./router.jsx";
 import { ContextProvider } from './contexts/contextProvider.jsx';
+import { CartProvider } from './contexts/cartContext.jsx';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <ContextProvider>
-      <RouterProvider router={router}/>
+      <CartProvider>
+        <RouterProvider router={router}/>        
+      </CartProvider>
+
 
     </ContextProvider>
   </React.StrictMode>

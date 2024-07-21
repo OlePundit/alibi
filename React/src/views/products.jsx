@@ -65,7 +65,7 @@ export default function Products(){
     };
     const getProducts = () => {
         setLoading(true);
-        axiosClient.get(`/products?includeUsers=true&page=${currentPage}`)
+        axiosClient.get(`/products?includeUsers=true&page=$rentPage}{cur`)
             .then(({ data }) => {
                 setLoading(false);
                 console.log(data.data);
@@ -90,12 +90,12 @@ export default function Products(){
         });
     }
     return (
-        <div>
+        <div className="body">
             <div className="products container">
                 <Tabs>
                     <div className="tabs-and-slider-container">
                         <div className="tabs-container">
-                            <TabList className="mt-3">
+                            <TabList className="categories mt-3">
                                 <Tab>All Drinks</Tab>
                                 <Tab>Wine</Tab>
                                 <Tab>Vodka</Tab>
@@ -130,7 +130,11 @@ export default function Products(){
                             <div className="col-6 col-md-4 col-lg-3 col-xl-4 filter-panel filter-res">
                                 <div class="dropdown mt-3">
                                     <button type="button" className="btn-add dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
-                                        Filter
+                                        <span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
+                                                <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5"/>
+                                            </svg>Filter
+                                        </span>
                                     </button>
                                     <div className="dropdown-menu filter-wrap">
                                         <label className="mt-3">Filter By Price</label>
@@ -159,8 +163,8 @@ export default function Products(){
 
                                             
                                             <div className="start"> 
-                                                <span className="starting">Starting price: {value[0]}</span>
-                                                Stop price: {value[1]}
+                                                <div className="starting">Starting price: {value[0]}</div>
+                                                <div>Stop price: {value[1]}</div>
                                             </div>
 
                                             <br/>
@@ -197,15 +201,13 @@ export default function Products(){
                             <div className="row justify-content-center job-contents d-flex">
                             {products.map(p => (        
                                 <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col">          
-                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                                </Link>
+                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img> 
                                     <div class="card-body">
                                         <div class="d-flex mb-1 align-items-center">     
                                             <div className="shopName">
                                                 <div>
                                                     <strong>
-                                                        <Link to="/shop/{{$mixer->user_id}}" className="link">
-                                                            <span class="text-dark">{p.user.shop_name}</span>
-                                                        </Link>
+                                                        <span class="text-dark">{p.user.shop_name}</span>
                                                     </strong>   
                                                 </div>
                                             </div>
@@ -213,6 +215,7 @@ export default function Products(){
                                         <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>
                                         <p><strong>{p.price}<span> KSH </span></strong></p> 
                                     </div> 
+                                    </Link>
                                 </div>
 
                             ))}
@@ -228,15 +231,13 @@ export default function Products(){
 
                             {products.filter(p => p.category === 'wine').map (p => (        
                                 <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col">          
-                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                                </Link>
+                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>
                                     <div class="card-body">
                                         <div class="d-flex mb-1 align-items-center">     
                                             <div>
                                                 <div>
                                                     <strong>
-                                                        <Link to="/shop/{{$mixer->user_id}}" className="link">
-                                                            <span class="text-dark">{p.user.shop_name}</span>
-                                                        </Link>
+                                                        <span class="text-dark">{p.user.shop_name}</span>
                                                     </strong>   
                                                 </div>
                                             </div>
@@ -244,6 +245,7 @@ export default function Products(){
                                         <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>
                                         <p><strong>{p.price}<span> KSH </span></strong></p> 
                                     </div> 
+                                    </Link>
                                 </div>
 
                             ))}
@@ -259,22 +261,21 @@ export default function Products(){
 
                             {products.filter(p => p.category === 'vodka').map (p => (        
                                 <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col">          
-                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                                </Link>
-                                    <div class="card-body">
-                                        <div class="d-flex mb-1 align-items-center">     
-                                            <div>
+                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img> 
+                                        <div class="card-body">
+                                            <div class="d-flex mb-1 align-items-center">     
                                                 <div>
-                                                    <strong>
-                                                        <Link to="/shop/{{$mixer->user_id}}" className="link">
-                                                            <span class="text-dark">{p.user.shop_name}</span>
-                                                        </Link>
-                                                    </strong>   
+                                                    <div>
+                                                        <strong>
+                                                                <span class="text-dark">{p.user.shop_name}</span>
+                                                        </strong>   
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>
-                                        <p><strong>{p.price}<span> KSH </span></strong></p> 
-                                    </div> 
+                                            <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>
+                                            <p><strong>{p.price}<span> KSH </span></strong></p> 
+                                        </div> 
+                                    </Link>
                                 </div>
 
                             ))}
@@ -290,22 +291,21 @@ export default function Products(){
 
                             {products.filter(p => p.category === 'whisky').map (p => (        
                                 <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col">          
-                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                                </Link>
-                                    <div class="card-body">
-                                        <div class="d-flex mb-1 align-items-center">     
-                                            <div>
+                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                      
+                                        <div class="card-body">
+                                            <div class="d-flex mb-1 align-items-center">     
                                                 <div>
-                                                    <strong>
-                                                        <Link to="/shop/{{$mixer->user_id}}" className="link">
+                                                    <div>
+                                                        <strong>
                                                             <span class="text-dark">{p.user.shop_name}</span>
-                                                        </Link>
-                                                    </strong>   
+                                                        </strong>   
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>
-                                        <p><strong>{p.price}<span> KSH </span></strong></p> 
-                                    </div> 
+                                            <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>
+                                            <p><strong>{p.price}<span> KSH </span></strong></p> 
+                                        </div> 
+                                    </Link>
                                 </div>
 
                             ))}
@@ -321,22 +321,21 @@ export default function Products(){
 
                             {products.filter(p => p.category === 'mixers').map (p => (        
                                 <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col">          
-                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                                </Link>
-                                    <div class="card-body">
-                                        <div class="d-flex mb-1 align-items-center">     
-                                            <div>
+                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                               
+                                        <div class="card-body">
+                                            <div class="d-flex mb-1 align-items-center">     
                                                 <div>
-                                                    <strong>
-                                                        <Link to="/shop/{{$mixer->user_id}}" className="link">
+                                                    <div>
+                                                        <strong>
                                                             <span class="text-dark">{p.user.shop_name}</span>
-                                                        </Link>
-                                                    </strong>   
+                                                        </strong>   
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>
-                                        <p><strong>{p.price}<span> KSH </span></strong></p> 
-                                    </div> 
+                                            <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>
+                                            <p><strong>{p.price}<span> KSH </span></strong></p> 
+                                        </div> 
+                                    </Link>
                                 </div>
 
                             ))}
@@ -352,22 +351,21 @@ export default function Products(){
 
                             {products.filter(p => p.category === 'beer').map (p => (        
                                 <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col">          
-                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                                </Link>
-                                    <div class="card-body">
-                                        <div class="d-flex mb-1 align-items-center">     
-                                            <div>
+                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>              
+                                        <div class="card-body">
+                                            <div class="d-flex mb-1 align-items-center">     
                                                 <div>
-                                                    <strong>
-                                                        <Link to="/shop/{{$mixer->user_id}}" className="link">
-                                                            <span class="text-dark">{p.user.shop_name}</span>
-                                                        </Link>
-                                                    </strong>   
+                                                    <div>
+                                                        <strong>
+                                                                <span class="text-dark">{p.user.shop_name}</span>
+                                                        </strong>   
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>
-                                        <p><strong>{p.price}<span> KSH </span></strong></p> 
-                                    </div> 
+                                            <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>
+                                            <p><strong>{p.price}<span> KSH </span></strong></p> 
+                                        </div> 
+                                    </Link>
                                 </div>
 
                             ))}
@@ -383,22 +381,21 @@ export default function Products(){
 
                             {products.filter(p => p.category === 'scotch').map (p => (        
                                 <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col">          
-                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                                </Link>
-                                    <div class="card-body">
-                                        <div class="d-flex mb-1 align-items-center">     
-                                            <div>
+                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                           
+                                        <div class="card-body">
+                                            <div class="d-flex mb-1 align-items-center">     
                                                 <div>
-                                                    <strong>
-                                                        <Link to="/shop/{{$mixer->user_id}}" className="link">
+                                                    <div>
+                                                        <strong>
                                                             <span class="text-dark">{p.user.shop_name}</span>
-                                                        </Link>
-                                                    </strong>   
+                                                        </strong>   
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>
-                                        <p><strong>{p.price}<span> KSH </span></strong></p> 
-                                    </div> 
+                                            <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>
+                                            <p><strong>{p.price}<span> KSH </span></strong></p> 
+                                        </div> 
+                                    </Link>
                                 </div>
 
                             ))}
@@ -414,22 +411,21 @@ export default function Products(){
 
                             {products.filter(p => p.category === 'spirit').map (p => (        
                                 <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col">          
-                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                                </Link>
-                                    <div class="card-body">
-                                        <div class="d-flex mb-1 align-items-center">     
-                                            <div>
+                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                             
+                                        <div class="card-body">
+                                            <div class="d-flex mb-1 align-items-center">     
                                                 <div>
-                                                    <strong>
-                                                        <Link to="/shop/{{$mixer->user_id}}" className="link">
+                                                    <div>
+                                                        <strong>
                                                             <span class="text-dark">{p.user.shop_name}</span>
-                                                        </Link>
-                                                    </strong>   
+                                                        </strong>   
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>
-                                        <p><strong>{p.price}<span> KSH </span></strong></p> 
-                                    </div> 
+                                            <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>
+                                            <p><strong>{p.price}<span> KSH </span></strong></p> 
+                                        </div> 
+                                    </Link>
                                 </div>
 
                             ))}
@@ -445,22 +441,21 @@ export default function Products(){
 
                             {products.filter(p => p.category === 'bourbon').map (p => (        
                                 <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col">          
-                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                                </Link>
-                                    <div class="card-body">
-                                        <div class="d-flex mb-1 align-items-center">     
-                                            <div>
+                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                           
+                                        <div class="card-body">
+                                            <div class="d-flex mb-1 align-items-center">     
                                                 <div>
-                                                    <strong>
-                                                        <Link to="/shop/{{$mixer->user_id}}" className="link">
+                                                    <div>
+                                                        <strong>
                                                             <span class="text-dark">{p.user.shop_name}</span>
-                                                        </Link>
-                                                    </strong>   
+                                                        </strong>   
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>
-                                        <p><strong>{p.price}<span> KSH </span></strong></p> 
-                                    </div> 
+                                            <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>
+                                            <p><strong>{p.price}<span> KSH </span></strong></p> 
+                                        </div> 
+                                    </Link>
                                 </div>
 
                             ))}
@@ -476,22 +471,21 @@ export default function Products(){
 
                             {products.filter(p => p.category === 'cognac').map (p => (        
                                 <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col">          
-                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                                </Link>
-                                    <div class="card-body">
-                                        <div class="d-flex mb-1 align-items-center">     
-                                            <div>
+                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>               
+                                        <div class="card-body">
+                                            <div class="d-flex mb-1 align-items-center">     
                                                 <div>
-                                                    <strong>
-                                                        <Link to="/shop/{{$mixer->user_id}}" className="link">
+                                                    <div>
+                                                        <strong>
                                                             <span class="text-dark">{p.user.shop_name}</span>
-                                                        </Link>
-                                                    </strong>   
+                                                        </strong>   
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>
-                                        <p><strong>{p.price}<span> KSH </span></strong></p> 
-                                    </div> 
+                                            <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>
+                                            <p><strong>{p.price}<span> KSH </span></strong></p> 
+                                        </div> 
+                                    </Link>
                                 </div>
 
                             ))}
@@ -507,22 +501,21 @@ export default function Products(){
 
                             {products.filter(p => p.category === 'cream').map (p => (        
                                 <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col">          
-                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                                </Link>
-                                    <div class="card-body">
-                                        <div class="d-flex mb-1 align-items-center">     
-                                            <div>
+                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                     
+                                        <div class="card-body">
+                                            <div class="d-flex mb-1 align-items-center">     
                                                 <div>
-                                                    <strong>
-                                                        <Link to="/shop/{{$mixer->user_id}}" className="link">
+                                                    <div>
+                                                        <strong>
                                                             <span class="text-dark">{p.user.shop_name}</span>
-                                                        </Link>
-                                                    </strong>   
+                                                        </strong>   
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>
-                                        <p><strong>{p.price}<span> KSH </span></strong></p> 
-                                    </div> 
+                                            <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>
+                                            <p><strong>{p.price}<span> KSH </span></strong></p> 
+                                        </div> 
+                                    </Link>
                                 </div>
 
                             ))}
@@ -538,22 +531,21 @@ export default function Products(){
 
                             {products.filter(p => p.category === 'rum').map (p => (        
                                 <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col">          
-                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                                </Link>
-                                    <div class="card-body">
-                                        <div class="d-flex mb-1 align-items-center">     
-                                            <div>
+                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                  
+                                        <div class="card-body">
+                                            <div class="d-flex mb-1 align-items-center">     
                                                 <div>
-                                                    <strong>
-                                                        <Link to="/shop/{{$mixer->user_id}}" className="link">
+                                                    <div>
+                                                        <strong>
                                                             <span class="text-dark">{p.user.shop_name}</span>
-                                                        </Link>
-                                                    </strong>   
+                                                        </strong>   
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>
-                                        <p><strong>{p.price}<span> KSH </span></strong></p> 
-                                    </div> 
+                                            <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>
+                                            <p><strong>{p.price}<span> KSH </span></strong></p> 
+                                        </div> 
+                                    </Link>
                                 </div>
 
                             ))}
@@ -569,22 +561,21 @@ export default function Products(){
 
                             {products.filter(p => p.category === 'gin').map (p => (        
                                 <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col">          
-                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                                </Link>
-                                    <div class="card-body">
-                                        <div class="d-flex mb-1 align-items-center">     
-                                            <div>
+                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                          
+                                        <div class="card-body">
+                                            <div class="d-flex mb-1 align-items-center">     
                                                 <div>
-                                                    <strong>
-                                                        <Link to="/shop/{{$mixer->user_id}}" className="link">
+                                                    <div>
+                                                        <strong>
                                                             <span class="text-dark">{p.user.shop_name}</span>
-                                                        </Link>
-                                                    </strong>   
+                                                        </strong>   
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>
-                                        <p><strong>{p.price}<span> KSH </span></strong></p> 
-                                    </div> 
+                                            <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>
+                                            <p><strong>{p.price}<span> KSH </span></strong></p> 
+                                        </div> 
+                                    </Link>
                                 </div>
 
                             ))}
@@ -600,22 +591,21 @@ export default function Products(){
 
                             {products.filter(p => p.category === 'brandy').map (p => (        
                                 <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col">          
-                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                                </Link>
-                                    <div class="card-body">
-                                        <div class="d-flex mb-1 align-items-center">     
-                                            <div>
+                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                              
+                                        <div class="card-body">
+                                            <div class="d-flex mb-1 align-items-center">     
                                                 <div>
-                                                    <strong>
-                                                        <Link to="/shop/{{$mixer->user_id}}" className="link">
+                                                    <div>
+                                                        <strong>
                                                             <span class="text-dark">{p.user.shop_name}</span>
-                                                        </Link>
-                                                    </strong>   
+                                                        </strong>   
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>
-                                        <p><strong>{p.price}<span> KSH </span></strong></p> 
-                                    </div> 
+                                            <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>
+                                            <p><strong>{p.price}<span> KSH </span></strong></p> 
+                                        </div> 
+                                    </Link>
                                 </div>
 
                             ))}
@@ -631,22 +621,21 @@ export default function Products(){
 
                             {products.filter(p => p.category === 'liquer').map (p => (        
                                 <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col">          
-                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                                </Link>
-                                    <div class="card-body">
-                                        <div class="d-flex mb-1 align-items-center">     
-                                            <div>
+                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                          
+                                        <div class="card-body">
+                                            <div class="d-flex mb-1 align-items-center">     
                                                 <div>
-                                                    <strong>
-                                                        <Link to="/shop/{{$mixer->user_id}}" className="link">
+                                                    <div>
+                                                        <strong>
                                                             <span class="text-dark">{p.user.shop_name}</span>
-                                                        </Link>
-                                                    </strong>   
+                                                        </strong>   
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>
-                                        <p><strong>{p.price}<span> KSH </span></strong></p> 
-                                    </div> 
+                                            <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>
+                                            <p><strong>{p.price}<span> KSH </span></strong></p> 
+                                        </div> 
+                                    </Link>
                                 </div>
 
                             ))}
@@ -656,6 +645,10 @@ export default function Products(){
                         </div>
                     </TabPanel>
                 </Tabs>
+                <div className="row mt-3 mb-3 d-flex button-wrap justify-content-center">
+                    <button className="btn-edit col-3" onClick={goToPreviousPage} disabled={currentPage === 1}>Previous</button>
+                    <button className="btn-add col-3 mx-2" onClick={goToNextPage} disabled={currentPage === totalPages}>Next</button>
+                </div>
 
             </div>
                     

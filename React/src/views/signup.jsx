@@ -9,7 +9,6 @@ export default function Signup(){
     const emailRef = useRef();
     const passwordRef = useRef();
     const passwordConfirmationRef = useRef();
-    const shopNameRef = useRef();
     const[errors, setErrors] = useState(null);
     const {setUser, setToken} = useStateContext(); 
 
@@ -50,9 +49,7 @@ export default function Signup(){
                                 }
                             </div>
                         }
-                        <input ref={nameRef} type="text" placeholder="Full Name"/>
-                        <input ref={shopNameRef} type="text" placeholder="Shop name"/>
-                        
+                        <input ref={nameRef} type="text" placeholder="Full Name"/>                        
                         <input ref={emailRef} type="email" placeholder="Email Address"/>
                         <input ref={passwordRef} type="password" placeholder="Password"/>
                         <input ref={passwordConfirmationRef} type="password" placeholder="Password confirmation"/>

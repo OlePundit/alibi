@@ -2,6 +2,7 @@ import { useState,useEffect } from "react";
 import axiosClient from "../axios-client.js";
 import { useStateContext } from "../contexts/contextProvider.jsx"
 import moment from 'moment';
+import { Navigate, Link, Outlet } from 'react-router-dom';
 
 export default function Users(){
     const [users, setUsers] = useState([]);
@@ -43,9 +44,11 @@ export default function Users(){
 
     return (
         <div>
-            <div syle={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+            <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
                 <h1>Users</h1>
-                
+                <Link to="/admin/user/new" className="btn-add">
+                    Add User
+                </Link>
             </div>
             <div className="card animated fadeInDown">
             <table>
@@ -80,6 +83,8 @@ export default function Users(){
                         <td>
                         &nbsp;
                         <button className="btn-delete" onClick={ev => onDelete(u)}>Delete</button>
+                        <Link className="btn-edit mx-2" to={`/admin/user/${u.id}`}>Edit</Link>
+
                         </td>
                     </tr>
                     ))}

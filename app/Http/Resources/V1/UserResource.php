@@ -13,13 +13,18 @@ class UserResource extends JsonResource
      *
      * @return array<string, mixed>
      */
+    
     public function toArray(Request $request): array
     {
+        $roles = $this->getRoleNames();
+        \Log::info('User roles:', $roles->toArray());
+
         return [
             'name'=>$this->name,
             'email'=>$this->email,
             'id'=>$this->id,
-            'shop_name'=>$this->shop_name
+            'shop_name'=>$this->shop_name,
+            'roles' => $roles,
 
         ];
     }

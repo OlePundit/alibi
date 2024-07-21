@@ -1,0 +1,197 @@
+import {useEffect, useState} from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import axiosClient from "../axios-client.js";
+
+export default function ProductForm(){
+    const {id} = useParams()
+    const navigate = useNavigate();
+
+    const [product, setProduct] = useState({
+        id: null,
+        name: "",
+        description: "",
+        volume: "",
+        price: "",
+        stock: "",
+        category: "",
+        image:"",
+        discount:""
+      });
+      const [errors, setErrors] = useState(null);
+      const [loading, setLoading] = useState(false);
+
+      if (id){
+        useEffect(()=>{
+            setLoading(true)
+            axiosClient.get(`/products/${id}`)
+                .then(({data})=>{
+                    setLoading(false)
+                    setProduct(data.currentProduct)
+                    console.log(data.currentProduct)
+                })
+                .catch(()=>{
+                    setLoading(false)
+                })
+        },[])
+    }
+
+      const onImageChoose = (ev) => {
+        const file = ev.target.files[0];
+        
+        // Check if file type is allowed
+        const allowedTypes = ['image/jpeg','image/png'];
+        if (!allowedTypes.includes(file.type)) {
+            alert('Invalid file type. Please select a file of type: jpeg or png.');
+            ev.target.value = null; // Reset file input
+            return;
+        }
+    
+        const reader = new FileReader();
+        reader.onload = () => {
+          const fileData = reader.result;
+          setProduct({
+                ...product,
+                image: file,
+            });
+        };
+        reader.readAsArrayBuffer(file);
+      };
+    
+    
+    
+      const onSubmit = (ev) => {
+        ev.preventDefault();
+        const formData = new FormData();
+
+        formData.append('name', product.name);
+        formData.append('description', product.description);
+        formData.append('volume', product.volume);
+        formData.append('price', product.price);
+        formData.append('stock', product.stock);
+        formData.append('category', product.category);
+        formData.append('discount', product.discount);
+        formData.append('image', product.image);
+
+        let res = null;
+
+        if(id){
+            res = axiosClient
+            .post(`/products/${product.id}?_method=PUT`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+            })
+        }else{
+            res = axiosClient
+            .post('/products', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+            })
+        }
+        res
+            .then(() => {
+                console.log(formData);
+                navigate('/admin/dashboard');
+                if(id){
+                    setNotification('Product was successfully updated')
+                }else{
+                    setNotification('Product was successfully created')
+    
+                }
+            })
+            .catch(err => {
+                const response = err.response;
+                if (response && response.status === 422) {
+                    setErrors(response.data.errors);
+                }
+            });
+    };
+    return (
+        <div>
+            {product.id && <h2> Update product: {product.name}</h2>}
+            {!product.id && <h2>New product</h2>}
+            {loading && <div className="text-center">Loading...</div>}
+            {errors && (
+              <div className="alert">
+                {Object.keys(errors).map((key) => (
+                  <p key={key}>{errors[key][0]}</p>
+                ))}
+              </div>
+            )}
+            {!loading && (
+
+            <form onSubmit={onSubmit} encType="multipart/form-data">
+
+                <input
+                onChange={(ev) => setProduct({ ...product, name: ev.target.value })}
+                value={product.name}
+                placeholder="Product name"
+                className="form-control mb-3"
+                ></input>
+                <input 
+                  id="image"
+                  type="file" 
+                  onChange={onImageChoose} 
+                  placeholder="Upload product image" 
+                  className="form-control mb-3"
+                />
+                <select value={product.volume} onChange={ev => setProduct({...product, volume: ev.target.value})} className="mb-3 form-control">
+                    <option value="default">Choose volume</option>
+                    <option value="5ltr">5ltr</option>
+                    <option value="1ltr">1ltr</option>
+                    <option value="750ml">750ml</option>
+                    <option value="500ml">500ml</option>
+                    <option value="350ml">350ml</option>
+                    <option value="250ml">250ml</option>
+                    <option value="other">Other</option>
+                </select>
+                <select value={product.category} onChange={ev => setProduct({...product, category: ev.target.value})} className="mb-3 form-control">
+                    <option value="default">Select category</option>
+                    <option value="wine">Wine</option>
+                    <option value="whisky">Whisky</option>
+                    <option value="brandy">Brandy</option>
+                    <option value="scotch">Scotch</option>
+                    <option value="spirit">Spirit</option>
+                    <option value="gin">Gin</option>
+                    <option value="vodka">Vodka</option>
+                    <option value="beer">Beer</option>
+                    <option value="rum">Rum</option>
+                    <option value="mixers">Mixers</option>
+                    <option value="bourbon">Bourbon</option>
+                    <option value="cognac">Cognac</option>
+                    <option value="cognac">Cream</option>
+                    <option value="cognac">Mixers</option>
+                    <option value="other">Other</option>
+                </select>
+                <select value={product.stock} onChange={ev => setProduct({...product, stock: ev.target.value})} className="mb-3 form-control">
+                    <option value="default">Stock status</option>
+                    <option value="available">available</option>
+                    <option value="unavailable">unavailable</option>
+                </select>
+                <input
+                onChange={(ev) => setProduct({ ...product, price: ev.target.value })}
+                value={product.price}
+                placeholder="Price"
+                className="form-control mb-3"
+                ></input>
+                <input
+                value={product.discount}
+                onChange={(ev) => setProduct({ ...product, discount: ev.target.value })}
+                placeholder="Discount (optional)"
+                className="form-control mb-3"
+                ></input>
+                <textarea
+                onChange={(ev) => setProduct({ ...product, description: ev.target.value })}
+                value={product.description}
+                placeholder="Description"
+                className="form-control"
+                >
+
+                </textarea>
+                <button className="btn-add mt-3">Submit</button>
+            </form>
+               )}
+        </div>
+    )
+}

@@ -29,6 +29,8 @@ class UpdateUserRequest extends FormRequest
             'name' => ['sometimes','required'],       
             'email' => ['sometimes','required'],
             'shop_name' => ['sometimes','required'],
+            'role' => ['sometimes','required'],
+            'email' => ['sometimes','required'],
 
         ];
        

@@ -32,16 +32,18 @@ export default function Admin(){
     return (
         <div id="defaultLayout">
             <aside>
-                <Link to="/dashboard">Dashboard</Link>
-                <Link to="/users">Users</Link>
-                <Link to="/jobs">Jobs</Link>
+                <Link to="/admin/dashboard">Dashboard</Link>
+                <Link to="/admin/users">Users</Link>
+                <Link to="/admin/products">Products</Link>
                 <Link to="/proposals">Proposals</Link>
 
             </aside>
             <div className="content">
                 <header>
                     <div>
-                        Header
+                        <Link to="/admin/product/new" className="btn-add">
+                            Add Product
+                        </Link>
                     </div>
                     <div>
                         {user.name}

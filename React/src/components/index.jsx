@@ -1,12 +1,18 @@
 import { Link,Navigate, Outlet } from 'react-router-dom';
 import { useStateContext } from "../contexts/contextProvider.jsx";
-import { useEffect } from "react";
+import { useEffect,useState } from "react";
 import axiosClient from "../axios-client.js";
-import { EnvelopeIcon } from "@heroicons/react/24/outline";
+import { ShoppingCartIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import Cart from './cart.jsx';
+import { useCart } from '../contexts/cartContext.jsx';
 
 export default function Index() {
     const { user, token, setUser, setToken } = useStateContext();
-    
+    const [isCartOpen, setIsCartOpen] = useState(false); // State to manage cart visibility
+    const { cart } = useCart(); // Access the cart from the cart context
+    const [isAdmin, setIsAdmin] = useState(false);
+
+    const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
 
     const onLogout = (ev) => {
         ev.preventDefault();
@@ -24,12 +30,20 @@ export default function Index() {
     useEffect(() => {
         axiosClient.get('/user')
             .then(({ data }) => {
-                setUser(data);
+                setUser(data.data);
+                if (data.data.roles && (data.data.roles.includes('admin') || data.data.roles.includes('super-admin'))) {
+                    setIsAdmin(true);
+                }
+                console.log(data.data)
             })
             .catch(error => {
                 console.error('Get user error:', error);
             });
     }, []);
+
+    const toggleCart = () => {
+        setIsCartOpen(!isCartOpen);
+    };
 
     return (
         <div id="app">
@@ -46,9 +60,9 @@ export default function Index() {
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         {token ? (
                         <div className="navbar-nav">
-                            {user.user_type==='brand' ? (
-                                <a className="nav-link active" aria-current="page" href={`/brands/dashboard/${user.id}`}>Dashboard</a>
-                            ): <a className="nav-link active" aria-current="page" href={`/creators/dashboard/${user.id}`}>Dashboard</a> }
+                            {isAdmin ? (
+                                <a className="nav-link active" aria-current="page" href={`/admin/dashboard`}>Dashboard</a>
+                            ): '' }
                             
                         </div>
                         ): null}
@@ -58,13 +72,24 @@ export default function Index() {
                                 <a className="nav-link active" aria-current="page" href="/explore">Explore</a>
                             </div>
                         */}
+                        <ul className="navbar-nav mx-auto">
+                            <form className="search-form col-md-6 col-lg-6 col-xl-6 mt-3 mb-3">
+                                <div className="input-group">
+                                    <span className="input-group-text"><MagnifyingGlassIcon className="icon-s" /></span>
+                                    <input type="text" className="form-control" placeholder="Search..." />
+                                </div>
+                            </form>
+                        </ul>
 
                         <ul className="navbar-nav ms-auto">
-                            <li className="nav-item" style={{ display: 'flex', alignItems: 'center' }}>
-                                <Link to="/inbox">
-                                    <EnvelopeIcon className="icon w-5 h-5" />
 
-                                </Link>
+                            <li className="nav-item" style={{ display: 'flex', alignItems: 'center' }}>
+                                <button onClick={toggleCart} style={{ color:'#000',border: 'none',background:'none' }}>
+                                    <ShoppingCartIcon className="icon-f w-5 h-5" />
+                                    {totalItems > 0 && (
+                                        <span className="cart-badge">{totalItems}</span>
+                                    )}
+                                </button>
 
                             </li>
 
@@ -88,7 +113,11 @@ export default function Index() {
                 </div>
             </nav>
             <main>
+
+            {isCartOpen && <Cart isOpen={isCartOpen} closeCart={toggleCart} />}
+
                 <Outlet />
+                
             </main>
         </div>
     );
