@@ -39,7 +39,7 @@ export default function ProductForm(){
         const file = ev.target.files[0];
         
         // Check if file type is allowed
-        const allowedTypes = ['image/jpeg','image/png'];
+        const allowedTypes = ['image/jpeg','image/png', 'image/webp'];
         if (!allowedTypes.includes(file.type)) {
             alert('Invalid file type. Please select a file of type: jpeg or png.');
             ev.target.value = null; // Reset file input
@@ -140,6 +140,7 @@ export default function ProductForm(){
                     <option value="default">Choose volume</option>
                     <option value="5ltr">5ltr</option>
                     <option value="1ltr">1ltr</option>
+                    <option value="1.5 ltr">1.5 ltr</option>
                     <option value="750ml">750ml</option>
                     <option value="500ml">500ml</option>
                     <option value="350ml">350ml</option>

@@ -294,6 +294,7 @@ table > tbody > tr > td {
 }
 .products .product-wrap img{
     height:200px;
+    object-fit: cover;
 }
 .products .product-wrap a{
     text-decoration:none;

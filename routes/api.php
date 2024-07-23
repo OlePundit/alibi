@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\V1\ProductController;
 use App\Http\Controllers\API\V1\AuthController;
 use App\Http\Resources\V1\UserResource;
+use App\Http\Controllers\API\ProposalNotificationsController;
+use App\Http\Controllers\API\V1\ImageController;
 
 
 /*
@@ -32,6 +34,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::delete('/products/{product}', [ProductController::class, 'destroy']);
 
 });
+Route::get('/images/{image}', [ImageController::class, 'show'])->name('image.show');
 Route::post('/signup', [AuthController::class, 'signup']);
 Route::post('/login', [AuthController::class, 'login']);    
 Route::apiResource('/users', AuthController::class);

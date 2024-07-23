@@ -25,18 +25,22 @@ export default function ProductDetail(){
         category:'',
         image:''
     });
-    const [userImages, setUserImages] = useState({}); // State to store user images
+    const [images, setImages] = useState({}); // State to store user images
 
     useEffect(() => {
         getProducts(); // Call getJobs when the component mounts
     }, []);
 
+    useEffect(() => {
+        showImage(); // Call showImage whenever job changes
+    }, [product]);
 
   
 
       
     const[errors, setErrors] = useState(null);
-    const [loading, setLoading]=useState(false)
+    const [loading, setLoading]=useState(false);
+
     const getProducts = () => {
         setLoading(true);
         axiosClient.get(`/products/${id}`)
@@ -45,6 +49,9 @@ export default function ProductDetail(){
                 setProduct(data.currentProduct);
                 console.log(data.currentProduct);
                 setProducts(data.similarProducts);
+                const productIds = data.similarProducts.map(product => product.id);
+                const uniqueProductIds = [...new Set(productIds)]
+                fetchImages(uniqueProductIds);
             })
             .catch((error) => {
                 setLoading(false);
@@ -106,6 +113,52 @@ export default function ProductDetail(){
             console.error('Failed to copy URL: ', err);
         });
     };
+    const removeUploadsPrefix = (fileName) => {
+        return fileName.replace(/^uploads\//, '');
+    };
+    const showImage = async () => {
+
+        try{
+            setLoading(true);
+            if (product && product.image) {
+                const image = removeUploadsPrefix(product.image);
+                const response = await axiosClient.get(`/images/${image}`, {
+                    responseType: 'blob',
+                });
+                const imageUrl = URL.createObjectURL(response.data);
+                setImageSrc(imageUrl);
+                if (response.status !== 200) {
+                    throw new Error(`Failed to display image: ${response.status} ${response.statusText}`);
+                }
+            }
+        }catch (error) {
+            console.error('Error displaying file:', error);
+            setErrors('Failed to displaying file');
+        } finally {
+            setLoading(false);
+        }
+    }
+    const fetchImages = async (productIds) => {
+        try {
+            const images = {};
+            setLoading(true);
+            for (const productId of productIds){
+                const response = await axiosClient.get(`/products/${productId}/image`, { responseType: 'blob' });
+                console.log('product ID:',productId);
+                console.log('Response Data:', response.data);
+                const imageUrl = URL.createObjectURL(response.data);
+                images[productId] = imageUrl;
+            
+            }
+            setImages(images);
+            localStorage.setItem('Image', JSON.stringify(images)); // Save images to local storage
+            console.log('Images:', images);
+        } catch (error) {
+            console.error("Error fetching images:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
     
     const handleAddToCart = () => {
         addToCart(product);
@@ -116,7 +169,7 @@ export default function ProductDetail(){
         <div className="container my-2 product-detail"> 
             <div className="row mt-5">
                 <div className="col-lg-4 col-md-4 col-sm-5 col-10">
-                    <img src={product.image}/>
+                    <img src={imageSrc}/>
                 </div>
                 <div className="col-lg-8 col-md-8 col-sm-7">
                     <h1>{product.name}<span>{product.volume}</span></h1>
@@ -151,7 +204,7 @@ export default function ProductDetail(){
                 {products.map(p => ( 
 
                 <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col-sm-5 col-10">          
-                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img> 
+                    <Link to={`/product/detail/${p.id}`}><img src={images[p.id]} className="card-img-top rounded" style={{maxWidth:'100%'}}></img> 
                         <div class="card-body">
                             <div class="d-flex mb-1 align-items-center">     
                                 <div className="shopName">
