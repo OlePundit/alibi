@@ -35,7 +35,7 @@ export default function Admin(){
                 <Link to="/admin/dashboard">Dashboard</Link>
                 <Link to="/admin/users">Users</Link>
                 <Link to="/admin/products">Products</Link>
-                <Link to="/proposals">Proposals</Link>
+                <Link to="/admin/orders">Orders</Link>
 
             </aside>
             <div className="content">

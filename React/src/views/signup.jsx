@@ -1,4 +1,4 @@
-import { Navigate, Link, Outlet } from 'react-router-dom';
+import { useNavigate, Navigate, Link, Outlet } from 'react-router-dom';
 import React, { useRef, useState } from 'react';
 import axiosClient from '../axios-client.js';
 import {useStateContext} from "../contexts/contextProvider.jsx";
@@ -11,13 +11,13 @@ export default function Signup(){
     const passwordConfirmationRef = useRef();
     const[errors, setErrors] = useState(null);
     const {setUser, setToken} = useStateContext(); 
+    const navigate = useNavigate(); // Import useNavigate from react-router-dom
 
     const onSubmit = (ev) => {
         ev.preventDefault(); 
         const payload = {
             name: nameRef.current.value,
             email: emailRef.current.value,
-            shop_name: shopNameRef.current.value,
             password: passwordRef.current.value,
             password_confirmation: passwordConfirmationRef.current.value,
         }
@@ -25,6 +25,7 @@ export default function Signup(){
             .then(({data})=>{
                 setUser(data.user)
                 setToken(data.token)
+                navigate('/'); // Use useNavigate to navigate to '/'
             })
             .catch(err => {
                 const response =err.response;

@@ -12,50 +12,56 @@ use App\Http\Resources\V1\ProductResource;
 use App\Http\Resources\V1\ProductCollection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    public function __construct(Product $product)
+    {
+        $this->product = $product;
+        $this->authorizeResource(Product::class, 'product');
+    }
 
-     public function index(Request $request)
-     {
-         $query = Product::query();
-     
-         // Filter by price range
-         $minPrice = $request->query('minPrice');
-         $maxPrice = $request->query('maxPrice');
-         if ($minPrice !== null && $maxPrice !== null) {
-             $query->whereBetween('price', [(int)$minPrice, (int)$maxPrice]);
-         }
-     
-         // Filter by volume
-         $volume = $request->query('volume');
-         if ($volume !== null) {
-             $query->where('volume', $volume);
-         }
-     
-         // Filter by stock
-         $stock = $request->query('stock');
-         if ($stock !== null) {
-             $query->where('stock', $stock);
-         }
-     
-         // Include users if requested
-         $includeUsers = $request->query('includeUsers');
-         if ($includeUsers) {
-             $query->with('user');
-         }
-     
-         // Paginate the results
-         $products = $query->paginate();
-         \Log::info('Request data:', $request->query());
-         \Log::info('SQL Query:', ['query' => $query->toSql(), 'bindings' => $query->getBindings()]);
+    public function index(Request $request)
+    {
+        $query = Product::query();
+    
+        // Filter by price range
+        $minPrice = $request->query('minPrice');
+        $maxPrice = $request->query('maxPrice');
+        if ($minPrice !== null && $maxPrice !== null) {
+            $query->whereBetween('price', [(int)$minPrice, (int)$maxPrice]);
+        }
+    
+        // Filter by volume
+        $volume = $request->query('volume');
+        if ($volume !== null) {
+            $query->where('volume', $volume);
+        }
+    
+        // Filter by stock
+        $stock = $request->query('stock');
+        if ($stock !== null) {
+            $query->where('stock', $stock);
+        }
+    
+        // Include users if requested
+        $includeUsers = $request->query('includeUsers');
+        if ($includeUsers) {
+            $query->with('user');
+        }
+    
+        // Paginate the results
+        $products = $query->paginate();
+        \Log::info('Request data:', $request->query());
+        \Log::info('SQL Query:', ['query' => $query->toSql(), 'bindings' => $query->getBindings()]);
 
-         return new ProductCollection($products->appends($request->query()));
-     }
-     
+        return new ProductCollection($products->appends($request->query()));
+    }
+    
 
     /**
      * Show the form for creating a new resource.
@@ -162,5 +168,27 @@ class ProductController extends Controller
 
         return response("", 204);
 
+    }
+    public function images($productId)
+    {
+        $product = Product::where('id', $productId)->first();
+
+        \Log::info('Attempting to retrieve product:', ['product' => $product]);
+
+
+        $imagePath = $product->image;
+
+        \Log::info('Attempting to retrieve image:', ['image' => $imagePath]);
+
+        if (!Storage::disk('public')->exists($imagePath)) {
+            \Log::error('File not found:', ['image' => $imagePath]);
+            abort(404, 'File not found'); // Or return a suitable error response
+        }
+
+        $fileContents = Storage::disk('public')->get($imagePath);
+        // Return the file as a response with the appropriate headers
+        return response($fileContents, 200)
+            ->header('Content-Type', 'image/png')
+            ->header('Content-Disposition', 'attachment; filename="' . basename($imagePath) . '"');
     }
 }

@@ -67,63 +67,65 @@ export default function AdminProducts(){
         }
     };
     return (
-        <div>
+        <div className="admin-products">
             <div syle={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
                 <h1>Products</h1>
                 
             </div>
-            <div className="card animated fadeInDown">
-            <table>
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Volume</th>
-                    <th>Availability</th>
-                    <th>Price</th>
-                    <th>Category</th>
-                    <th>Discount</th>
-                    <th>Create Date</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                {loading &&
-                    <tbody>
-                    <tr>
-                    <td colSpan="5" className="text-center">
-                        Loading...
-                    </td>
-                    </tr>
-                    </tbody>
-                }
-                {!loading &&
-                    <tbody>
-                    {products.map(p => (
-                    <tr key={p.id}>
-                        <td>{p.id}</td>
-                        <td>{p.name}</td>
-                        <td>{p.volume}</td>
-                        <td>{p.stock}</td>
-                        <td>{p.price}</td>
-                        <td>{p.category}</td>
-                        <td>{p.discount}</td>
-                        <td>{formatDate(p.created_at)}</td>
-                        <td>
-                        &nbsp;
-                        <button className="btn-delete" onClick={ev => onDelete(p)}>Delete</button>
-                        <Link className="btn-edit mx-2" to={`/admin/product/${p.id}`}>Edit</Link>
-                        </td>
-                    </tr>
-                    ))}
-                    </tbody>
-                }
-                </table>
-                <div className="row mt-3 mb-3 d-flex button-wrap justify-content-center">
-                    <button className="btn-edit col-3" onClick={goToPreviousPage} disabled={currentPage === 1}>Previous</button>
-                    <button className="btn-add col-3 mx-2" onClick={goToNextPage} disabled={currentPage === totalPages}>Next</button>
+            <div className="row mil-tab">
+                <div className="col-xl-12 col-lg-12 col-md-12 col-11 card shadow products">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Volume</th>
+                                <th>Availability</th>
+                                <th>Price</th>
+                                <th>Category</th>
+                                <th>Discount</th>
+                                <th>Create Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        {loading &&
+                            <tbody>
+                                <tr>
+                                <td colSpan="5" className="text-center">
+                                    Loading...
+                                </td>
+                                </tr>
+                            </tbody>
+                        }
+                        {!loading &&
+                            <tbody>
+                                {products.map(p => (
+                                <tr key={p.id}>
+                                    <td>{p.id}</td>
+                                    <td>{p.name}</td>
+                                    <td>{p.volume}</td>
+                                    <td>{p.stock}</td>
+                                    <td>{p.price}</td>
+                                    <td>{p.category}</td>
+                                    <td>{p.discount}</td>
+                                    <td>{formatDate(p.created_at)}</td>
+                                    <td>
+                                    &nbsp;
+                                    <button className="btn-delete" onClick={ev => onDelete(p)}>Delete</button>
+                                    <Link className="btn-edit mx-2" to={`/admin/product/${p.id}`}>Edit</Link>
+                                    </td>
+                                </tr>
+                                ))}
+                            </tbody>
+                        }
+                    </table>
                 </div>
-
             </div>
+            <div className="row mt-3 mb-3 d-flex button-wrap justify-content-center">
+                <button className="btn-edit col-3" onClick={goToPreviousPage} disabled={currentPage === 1}>Previous</button>
+                <button className="btn-add col-3 mx-2" onClick={goToNextPage} disabled={currentPage === totalPages}>Next</button>
+            </div>
+
         
         </div>
     )

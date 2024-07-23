@@ -27,7 +27,7 @@ export default function Cart({ isOpen, closeCart }) {
             <ul>
                 {cart.map(item => (
                     <li key={item.id} className="d-flex">
-                        <div className="d-flex">
+                        <div className="d-flex item-wrap">
                             <img src={item.image} alt={item.name} width="50" height="50" />
                             <div>
                                 <h4>{item.name}</h4>
@@ -50,7 +50,7 @@ export default function Cart({ isOpen, closeCart }) {
                 ))}
             </ul>
             <h2>Order Summary</h2>
-            <p>Subtotal: <strong>KSH {subtotal.toFixed(2)}</strong></p>
+            <p className="sub-total">Subtotal: <strong>KSH {subtotal.toFixed(2)}</strong></p>
             <Link to="/checkout" onClick={closeCart}>
                 <button>Checkout</button>
 

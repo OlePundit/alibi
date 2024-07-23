@@ -62,7 +62,6 @@ input:focus {
 .btn-delete {
     font-family: "Roboto", sans-serif;
     outline: 0;
-    background: #5b08a7;
     border: 0;
     text-decoration: none;
     padding: 15px;
@@ -72,7 +71,12 @@ input:focus {
     transition: all 0.3 ease;
     cursor: pointer;
 }
+.btn-edit{
+    background: none;
+    color:#000;
+    border: 1px solid #666666;
 
+}
 .btn-block {
     width: 100%;
 }
@@ -208,7 +212,7 @@ table > tbody > tr > td {
 }
 #defaultLayout aside {
     width: 240px;
-    background-color: #5b08a7;
+    background-color: #666666;
     padding: 1rem
 }
 
@@ -219,6 +223,7 @@ table > tbody > tr > td {
     color: white;
     text-decoration: none;
     transition: all 0.2s;
+    text-align: start;
 }
 
 #defaultLayout aside > a:hover {
@@ -383,7 +388,14 @@ table > tbody > tr > td {
   flex: 2; /* Adjust the flex value to control the width ratio */
   max-width: 200px; /* Adjust as needed */
 }
-
+.filter-container img {
+    width: 100%;
+    margin-left: 10px;
+    margin-top: 10px;
+    object-fit: cover;
+    border-radius: 8px;
+    height: 330px;
+}
 .slider-container img{
   width:100%;
   object-fit: cover;
@@ -502,7 +514,9 @@ input[type="range"] {
 .product-detail p span{
     color:#00a762;
 }
-
+.product-detail .product-wrap span{
+    color:#000;
+}
 .product-detail span{
     margin-left: 10px;
 }
@@ -558,6 +572,7 @@ input[type="range"] {
 .cart input{
     width:60px;
     margin-left: 10px;
+    height:fit-content;
 }
 .cart button{
     width:fit-content;
@@ -588,6 +603,7 @@ input[type="range"] {
 }
 .cart h4{
     margin-left: 10px;
+    text-align: start;
 }
 .cart p{
     text-align: start;
@@ -650,4 +666,345 @@ input[type="range"] {
 }
 .checkout .radio-wrap{
     margin-right: 10px;
+}
+
+
+
+.admin-products .products table tbody .actions .btn-edit{
+    font-size: 0.8rem;
+    display: flex;
+    justify-content: center;
+}
+.admin-products .products table tbody .actions .btn-add{
+    font-size: 0.8rem;
+    display: flex;
+    justify-content: center;
+}
+
+
+.footer-section{
+    padding-top: 100px;
+}
+.footer-section .footer-wrap{
+    width:70%;
+    margin: auto;
+}
+.footer-section .icon-f{
+    width:20px;
+}
+.footer-section svg{
+    width:20px;
+    margin-right: 20px;
+}
+.footer-section ul{
+    display: flex;
+    list-style-type: none;
+    justify-content: start;
+    align-items: start;
+    flex-direction: column;
+    padding-left: 0;
+}
+.footer-section .socials{
+    display: flex;
+    flex-direction: row;
+}
+.footer-section a{
+    text-decoration: none;
+    color:#000;
+}
+.footer-section a:hover{
+    color:#00a762;
+}
+.footer-section h5{
+    font-size: 17px;
+}
+.footer-section h4{
+    text-align: start;
+}
+/*  ==============================================
+Responsiveness
+=================================================*/
+@media(max-width:280px){
+    .slider-container {
+        display: none;
+    }
+    .product-detail .btn-add{
+        margin-bottom: 10px;
+        margin-left: 10px;
+    }
+    .product-detail .btn-edit{
+        margin-left: 10px;
+    }
+    .cart {
+        width: 70%;
+    }
+    .cart ul li {
+        flex-direction: column;
+    }
+    .cart h4{
+        margin-left: 0px;
+        text-align: start;
+        margin-top: 7px;
+    }
+    .cart p {
+        text-align: start;
+        padding-left: 0px;
+    }
+    .cart form{
+        display:flex;
+    }
+    .cart input {
+        margin-left: 0px;
+        margin-bottom: 7px;
+    }
+    .cart ul button {
+        margin-left: 0px;
+    }
+    .cart .sub-total{
+        padding-left: 10px;
+    }
+    .cart ul .item-wrap{
+        flex-direction: column;
+    }
+    .admin-products .products table tbody .actions{
+        display: flex;
+        flex-direction: column;
+    }
+    .admin-products .mil-tab{
+        display: flex;
+        justify-content: center;
+    }
+    .admin-products .products table tbody .actions .btn-edit{
+        font-size: 0.3rem;
+        display: flex;
+        justify-content: center;
+    }
+    .admin-products .products table tbody .actions .btn-add{
+        font-size: 0.3rem;
+        display: flex;
+        justify-content: center;
+    }
+    .admin-products table > thead > tr > th {
+        text-align: left;
+        padding: 0.2rem 0.2rem;
+        background-color: #efefef;
+        font-size: 0.3rem;
+    }
+    .admin-products table > tbody > tr > td {
+        padding: 0.5rem 0.2rem;
+        border-bottom: 1px solid #efefef;
+        text-align: left;
+        font-size: 0.3rem;
+    }
+}
+@media(min-width:281px) and (max-width:450px){
+    .tabs-container {
+        flex: 3;
+        max-width: 150px;
+        margin-right: 10px;
+    }
+    .products .product-wrap img {
+        height: 300px;
+    }
+    .slider-container {
+        display: none;
+    }
+    .product-detail .btn-add{
+        margin-bottom: 10px;
+        margin-left: 10px;
+    }
+    .product-detail .btn-edit{
+        margin-left: 10px;
+    }
+    .cart {
+        width: 70%;
+    }
+    .cart ul li {
+        flex-direction: column;
+    }
+    .cart h4{
+        margin-left: 0px;
+        text-align: start;
+        margin-top: 7px;
+    }
+    .cart p {
+        text-align: start;
+        padding-left: 0px;
+    }
+    .cart form{
+        display:flex;
+    }
+    .cart input {
+        margin-left: 0px;
+        margin-bottom: 7px;
+    }
+    .cart ul button {
+        margin-left: 0px;
+    }
+    .cart .sub-total{
+        padding-left: 10px;
+    }
+    .cart ul .item-wrap{
+        flex-direction: column;
+    }
+    .admin-products .mil-tab{
+        display: flex;
+        justify-content: center;
+    }
+    .admin-products .products table tbody .actions .btn-edit{
+        font-size: 0.3rem;
+        display: flex;
+        justify-content: center;
+    }
+    .admin-products .products table tbody .actions .btn-add{
+        font-size: 0.3rem;
+        display: flex;
+        justify-content: center;
+    }
+    .admin-products table > thead > tr > th {
+        text-align: left;
+        padding: 0.2rem 0.2rem;
+        background-color: #efefef;
+        font-size: 0.3rem;
+    }
+    .admin-products table > tbody > tr > td {
+        padding: 0.5rem 0.2rem;
+        border-bottom: 1px solid #efefef;
+        text-align: left;
+        font-size: 0.3rem;
+    }
+}
+@media (min-width: 450px) and (max-width: 575px) {
+    .products .product-wrap img {
+        height: 300px;
+    }
+    .tabs-container {
+        flex: 3;
+        max-width: 150px;
+        margin-right: 10px;
+    }
+    .product-detail img{
+        margin-bottom: 15px;
+    }
+    .product-detail .btn-add{
+        margin-bottom: 10px;
+        margin-left: 10px;
+    }
+    .product-detail .btn-edit{
+        margin-left: 10px;
+    }
+    .cart {
+        width: 60%;
+    }
+    .cart ul li {
+        flex-direction: column;
+    }
+    .admin-products .mil-tab{
+        display: flex;
+        justify-content: center;
+    }
+    .admin-products .products table tbody .actions .btn-edit{
+        font-size: 0.6rem;
+        display: flex;
+        justify-content: center;
+    }
+    .admin-products .products table tbody .actions .btn-add{
+        font-size: 0.6rem;
+        display: flex;
+        justify-content: center;
+    }
+    .admin-products table > thead > tr > th {
+        text-align: left;
+        padding: 0.3rem 0.3rem;
+        background-color: #efefef;
+        font-size: 0.5rem;
+    }
+    .admin-products table > tbody > tr > td {
+        padding: 0.5rem 0.2rem;
+        border-bottom: 1px solid #efefef;
+        text-align: left;
+        font-size: 0.6rem;
+    }
+}
+@media(min-width:575px) and (max-width:768px){
+    .tabs-container {
+        flex: 3;
+        max-width: 150px;
+        margin-right: 10px;
+    }
+    .product-detail img {
+        width: 100%;
+        border-radius: 8px;
+        height: 310px;
+        object-fit: cover;
+    }
+    .product-detail .btn-add{
+        margin-bottom: 10px;
+    }
+    .cart {
+        width: 60%;
+    }
+    .admin-products .mil-tab{
+        display: flex;
+        justify-content: center;
+    }
+    .admin-products .products table tbody .actions .btn-edit{
+        font-size: 0.6rem;
+        display: flex;
+        justify-content: center;
+    }
+    .admin-products .products table tbody .actions .btn-add{
+        font-size: 0.6rem;
+        display: flex;
+        justify-content: center;
+    }
+    .admin-products table > thead > tr > th {
+        text-align: left;
+        padding: 0.3rem 0.3rem;
+        background-color: #efefef;
+        font-size: 0.8rem;
+    }
+    .admin-products table > tbody > tr > td {
+        padding: 0.5rem 0.2rem;
+        border-bottom: 1px solid #efefef;
+        text-align: left;
+        font-size: 0.8rem;
+    }
+}
+@media(max-width:768px){
+
+}
+@media(min-width:768px){
+
+}
+@media(min-width:769px) and (max-width:991px){
+    .product-detail img {
+        width: 100%;
+        border-radius: 8px;
+        height: 300px;
+        object-fit: cover;
+    }
+    .cart {
+        width: 45%;
+    }
+    .admin-products .products table tbody .actions{
+        display: flex;
+        flex-direction: column;
+    }
+    .admin-products .products table tbody .actions .btn-edit{
+        font-size: 0.8rem;
+        display: flex;
+        justify-content: center;
+    }
+    .admin-products .products table tbody .actions .btn-add{
+        font-size: 0.8rem;
+        display: flex;
+        justify-content: center;
+    }
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+
+}
+@media (min-width: 1200px) and (max-width: 1281px) {
+   
 }

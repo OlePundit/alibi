@@ -8,6 +8,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import liquor from '../assets/liquor.jpg';
 import liquor1 from '../assets/liquor1.jpg';
 import liquor2 from '../assets/liquor2.jpg';
+import liquor3 from '../assets/liquor3.jpg';
 import ReactSlider from 'react-slider';
 
 export default function Products(){
@@ -20,6 +21,8 @@ export default function Products(){
 
     const [currentPage, setCurrentPage] = useState(1); // Move currentPage state outside PaginationComponent
     const [loading, setLoading] = useState(false);
+    const [images, setImages] = useState({}); // State to store user images
+
     const settings = {
         dots: true,
         infinite: true,
@@ -65,16 +68,40 @@ export default function Products(){
     };
     const getProducts = () => {
         setLoading(true);
-        axiosClient.get(`/products?includeUsers=true&page=$rentPage}{cur`)
+        axiosClient.get(`/products?includeUsers=true&page=${currentPage}`)
             .then(({ data }) => {
                 setLoading(false);
                 console.log(data.data);
                 setProducts(data.data);
+                const productIds = data.data.map(product => product.id);
+                const uniqueProductIds = [...new Set(productIds)]
+                fetchImages(uniqueProductIds);
             })
             .catch((error) => {
                 setLoading(false);
                 console.error("Error fetching products:", error);
             });
+    };
+    const fetchImages = async (productIds) => {
+        try {
+            const images = {};
+            setLoading(true);
+            for (const productId of productIds){
+                const response = await axiosClient.get(`/products/${productId}/image`, { responseType: 'blob' });
+                console.log('product ID:',productId);
+                console.log('Response Data:', response.data);
+                const imageUrl = URL.createObjectURL(response.data);
+                images[productId] = imageUrl;
+            
+            }
+            setImages(images);
+            localStorage.setItem('Image', JSON.stringify(images)); // Save images to local storage
+            console.log('Images:', images);
+        } catch (error) {
+            console.error("Error fetching images:", error);
+        } finally {
+            setLoading(false);
+        }
     };
     const onSubmit = ev => {
         ev.preventDefault()
@@ -192,6 +219,7 @@ export default function Products(){
                                         </form>
                                     </div>
                                 </div>
+                                <img src={liquor3}></img>
                             </div> 
                         </div>
                     </div>
@@ -200,8 +228,8 @@ export default function Products(){
                         <div>
                             <div className="row justify-content-center job-contents d-flex">
                             {products.map(p => (        
-                                <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col">          
-                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img> 
+                                <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col-sm-5 col-10">          
+                                    <Link to={`/product/detail/${p.id}`}><img src={images[p.id]} className="card-img-top rounded" style={{maxWidth:'100%'}}></img> 
                                     <div class="card-body">
                                         <div class="d-flex mb-1 align-items-center">     
                                             <div className="shopName">
@@ -230,8 +258,8 @@ export default function Products(){
                             <div className="row justify-content-center job-contents d-flex">
 
                             {products.filter(p => p.category === 'wine').map (p => (        
-                                <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col">          
-                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>
+                                <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col-sm-5 col-10">          
+                                    <Link to={`/product/detail/${p.id}`}><img src={images[p.id]} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>
                                     <div class="card-body">
                                         <div class="d-flex mb-1 align-items-center">     
                                             <div>
@@ -260,8 +288,8 @@ export default function Products(){
                             <div className="row justify-content-center job-contents d-flex">
 
                             {products.filter(p => p.category === 'vodka').map (p => (        
-                                <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col">          
-                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img> 
+                                <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col-sm-5 col-10">          
+                                    <Link to={`/product/detail/${p.id}`}><img src={images[p.id]} className="card-img-top rounded" style={{maxWidth:'100%'}}></img> 
                                         <div class="card-body">
                                             <div class="d-flex mb-1 align-items-center">     
                                                 <div>
@@ -290,8 +318,8 @@ export default function Products(){
                             <div className="row justify-content-center job-contents d-flex">
 
                             {products.filter(p => p.category === 'whisky').map (p => (        
-                                <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col">          
-                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                      
+                                <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col-sm-5 col-10">          
+                                    <Link to={`/product/detail/${p.id}`}><img src={images[p.id]} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                      
                                         <div class="card-body">
                                             <div class="d-flex mb-1 align-items-center">     
                                                 <div>
@@ -320,8 +348,8 @@ export default function Products(){
                             <div className="row justify-content-center job-contents d-flex">
 
                             {products.filter(p => p.category === 'mixers').map (p => (        
-                                <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col">          
-                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                               
+                                <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col-sm-5 col-10">          
+                                    <Link to={`/product/detail/${p.id}`}><img src={images[p.id]} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                               
                                         <div class="card-body">
                                             <div class="d-flex mb-1 align-items-center">     
                                                 <div>
@@ -350,8 +378,8 @@ export default function Products(){
                             <div className="row justify-content-center job-contents d-flex">
 
                             {products.filter(p => p.category === 'beer').map (p => (        
-                                <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col">          
-                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>              
+                                <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col-sm-5 col-10">          
+                                    <Link to={`/product/detail/${p.id}`}><img src={images[p.id]} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>              
                                         <div class="card-body">
                                             <div class="d-flex mb-1 align-items-center">     
                                                 <div>
@@ -380,8 +408,8 @@ export default function Products(){
                             <div className="row justify-content-center job-contents d-flex">
 
                             {products.filter(p => p.category === 'scotch').map (p => (        
-                                <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col">          
-                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                           
+                                <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col-sm-5 col-10">          
+                                    <Link to={`/product/detail/${p.id}`}><img src={images[p.id]} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                           
                                         <div class="card-body">
                                             <div class="d-flex mb-1 align-items-center">     
                                                 <div>
@@ -410,8 +438,8 @@ export default function Products(){
                             <div className="row justify-content-center job-contents d-flex">
 
                             {products.filter(p => p.category === 'spirit').map (p => (        
-                                <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col">          
-                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                             
+                                <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col-sm-5 col-10">          
+                                    <Link to={`/product/detail/${p.id}`}><img src={images[p.id]} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                             
                                         <div class="card-body">
                                             <div class="d-flex mb-1 align-items-center">     
                                                 <div>
@@ -440,8 +468,8 @@ export default function Products(){
                             <div className="row justify-content-center job-contents d-flex">
 
                             {products.filter(p => p.category === 'bourbon').map (p => (        
-                                <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col">          
-                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                           
+                                <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col-sm-5 col-10">          
+                                    <Link to={`/product/detail/${p.id}`}><img src={images[p.id]} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                           
                                         <div class="card-body">
                                             <div class="d-flex mb-1 align-items-center">     
                                                 <div>
@@ -470,8 +498,8 @@ export default function Products(){
                             <div className="row justify-content-center job-contents d-flex">
 
                             {products.filter(p => p.category === 'cognac').map (p => (        
-                                <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col">          
-                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>               
+                                <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col-sm-5 col-10">          
+                                    <Link to={`/product/detail/${p.id}`}><img src={images[p.id]} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>               
                                         <div class="card-body">
                                             <div class="d-flex mb-1 align-items-center">     
                                                 <div>
@@ -500,8 +528,8 @@ export default function Products(){
                             <div className="row justify-content-center job-contents d-flex">
 
                             {products.filter(p => p.category === 'cream').map (p => (        
-                                <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col">          
-                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                     
+                                <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col-sm-5 col-10">          
+                                    <Link to={`/product/detail/${p.id}`}><img src={images[p.id]} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                     
                                         <div class="card-body">
                                             <div class="d-flex mb-1 align-items-center">     
                                                 <div>
@@ -530,8 +558,8 @@ export default function Products(){
                             <div className="row justify-content-center job-contents d-flex">
 
                             {products.filter(p => p.category === 'rum').map (p => (        
-                                <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col">          
-                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                  
+                                <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col-sm-5 col-10">          
+                                    <Link to={`/product/detail/${p.id}`}><img src={images[p.id]} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                  
                                         <div class="card-body">
                                             <div class="d-flex mb-1 align-items-center">     
                                                 <div>
@@ -560,8 +588,8 @@ export default function Products(){
                             <div className="row justify-content-center job-contents d-flex">
 
                             {products.filter(p => p.category === 'gin').map (p => (        
-                                <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col">          
-                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                          
+                                <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col-sm-5 col-10">          
+                                    <Link to={`/product/detail/${p.id}`}><img src={images[p.id]} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                          
                                         <div class="card-body">
                                             <div class="d-flex mb-1 align-items-center">     
                                                 <div>
@@ -590,8 +618,8 @@ export default function Products(){
                             <div className="row justify-content-center job-contents d-flex">
 
                             {products.filter(p => p.category === 'brandy').map (p => (        
-                                <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col">          
-                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                              
+                                <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col-sm-5 col-10">          
+                                    <Link to={`/product/detail/${p.id}`}><img src={images[p.id]} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                              
                                         <div class="card-body">
                                             <div class="d-flex mb-1 align-items-center">     
                                                 <div>
@@ -620,8 +648,8 @@ export default function Products(){
                             <div className="row justify-content-center job-contents d-flex">
 
                             {products.filter(p => p.category === 'liquer').map (p => (        
-                                <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col">          
-                                    <Link to={`/product/detail/${p.id}`}><img src={p.image} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                          
+                                <div className="product-wrap col-xl-2 col-lg-3 col-md-3 col-sm-5 col-10">          
+                                    <Link to={`/product/detail/${p.id}`}><img src={images[p.id]} className="card-img-top rounded" style={{maxWidth:'100%'}}></img>                          
                                         <div class="card-body">
                                             <div class="d-flex mb-1 align-items-center">     
                                                 <div>

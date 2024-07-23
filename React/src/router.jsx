@@ -26,7 +26,7 @@ const router = createBrowserRouter([
           },
           {
             path: '/admin/dashboard',
-            element: <Dashboard />
+            element: <Navigate to="/admin/products" />
           },
           {
             path: '/admin/product/new',

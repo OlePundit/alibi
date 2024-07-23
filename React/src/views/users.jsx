@@ -43,54 +43,56 @@ export default function Users(){
     };
 
     return (
-        <div>
+        <div className="admin-products">
             <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
                 <h1>Users</h1>
                 <Link to="/admin/user/new" className="btn-add">
                     Add User
                 </Link>
             </div>
-            <div className="card animated fadeInDown">
-            <table>
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>User type</th>
-                    <th>Create Date</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                {loading &&
-                    <tbody>
+            <div className="row mil-tab">
+                <div className="col-xl-12 col-lg-12 col-md-12 col-11 card shadow products">
+                    <table>
+                    <thead>
                     <tr>
-                    <td colSpan="5" className="text-center">
-                        Loading...
-                    </td>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>User type</th>
+                        <th>Create Date</th>
+                        <th>Actions</th>
                     </tr>
-                    </tbody>
-                }
-                {!loading &&
-                    <tbody>
-                    {users.map(u => (
-                    <tr key={u.id}>
-                        <td>{u.id}</td>
-                        <td>{u.name}</td>
-                        <td>{u.email}</td>
-                        <td>{u.user_type}</td>
-                        <td>{formatDate(u.created_at)}</td>
-                        <td>
-                        &nbsp;
-                        <button className="btn-delete" onClick={ev => onDelete(u)}>Delete</button>
-                        <Link className="btn-edit mx-2" to={`/admin/user/${u.id}`}>Edit</Link>
-
+                    </thead>
+                    {loading &&
+                        <tbody>
+                        <tr>
+                        <td colSpan="5" className="text-center">
+                            Loading...
                         </td>
-                    </tr>
-                    ))}
-                    </tbody>
-                }
-                </table>
+                        </tr>
+                        </tbody>
+                    }
+                    {!loading &&
+                        <tbody>
+                        {users.map(u => (
+                        <tr key={u.id}>
+                            <td>{u.id}</td>
+                            <td>{u.name}</td>
+                            <td>{u.email}</td>
+                            <td>{u.user_type}</td>
+                            <td>{formatDate(u.created_at)}</td>
+                            <td>
+                            &nbsp;
+                            <button className="btn-delete" onClick={ev => onDelete(u)}>Delete</button>
+                            <Link className="btn-edit mx-2" to={`/admin/user/${u.id}`}>Edit</Link>
+
+                            </td>
+                        </tr>
+                        ))}
+                        </tbody>
+                    }
+                    </table>
+                </div>
             </div>
         
         </div>
