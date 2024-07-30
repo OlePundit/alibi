@@ -67,13 +67,15 @@ class ProductController extends Controller
         } else {
             // Apply random order for all other queries, if needed
             $products = $query->inRandomOrder()->paginate();
+            $products->appends($request->query()); // Add query parameters to the pagination links
         }
         
         \Log::info('Request data:', $request->query());
         \Log::info('SQL Query:', ['query' => $query->toSql(), 'bindings' => $query->getBindings()]);
 
-        return new ProductCollection($products->appends($request->query()));
+        return new ProductCollection($products);
     }
+
 
     
 
