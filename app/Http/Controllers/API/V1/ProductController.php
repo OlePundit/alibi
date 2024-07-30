@@ -33,19 +33,19 @@ class ProductController extends Controller
         $minPrice = $request->query('minPrice');
         $maxPrice = $request->query('maxPrice');
         if ($minPrice !== null && $maxPrice !== null) {
-            $query->whereBetween('price', [(int)$minPrice, (int)$maxPrice]);
+            $query->whereBetween('price', [(int)$minPrice, (int)$maxPrice])->inRandomOrder();
         }
     
         // Filter by volume
         $volume = $request->query('volume');
         if ($volume !== null) {
-            $query->where('volume', $volume);
+            $query->where('volume', $volume)->inRandomOrder();
         }
     
         // Filter by stock
         $stock = $request->query('stock');
         if ($stock !== null) {
-            $query->where('stock', $stock);
+            $query->where('stock', $stock)->inRandomOrder();
         }
         $name = $request->query('name');
         if ($name !== null) {
@@ -63,7 +63,7 @@ class ProductController extends Controller
         }
     
         // Paginate the results
-        $products = $query->paginate();
+        $products = $query->inRandomOrder()->paginate();
         \Log::info('Request data:', $request->query());
         \Log::info('SQL Query:', ['query' => $query->toSql(), 'bindings' => $query->getBindings()]);
 

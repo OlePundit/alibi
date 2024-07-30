@@ -162,7 +162,11 @@ export default function ProductForm(){
                     <option value="bourbon">Bourbon</option>
                     <option value="cognac">Cognac</option>
                     <option value="cognac">Cream</option>
-                    <option value="cognac">Mixers</option>
+                    <option value="mixers">Mixers</option>                    
+                    <option value="tequila">Tequila</option>
+                    <option value="liquer">Liquer</option>
+                    <option value="champagne">Champagne</option>
+
                     <option value="other">Other</option>
                 </select>
                 <select value={product.stock} onChange={ev => setProduct({...product, stock: ev.target.value})} className="mb-3 form-control">
