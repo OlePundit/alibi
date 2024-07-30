@@ -71,7 +71,7 @@ export default function Products(){
         axiosClient.get(`products?includeTrending=true`)
         .then(({ data })=> {
             setLoading(false);
-            console.log(data.data);
+            console.log('these are the trendings:',data.data);
             setTrendings(data.data);
 
         })

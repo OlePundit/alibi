@@ -24,51 +24,57 @@ class ProductController extends Controller
         $this->product = $product;
         $this->authorizeResource(Product::class, 'product');
     }
-
     public function index(Request $request)
     {
         $query = Product::query();
-    
+        
         // Filter by price range
         $minPrice = $request->query('minPrice');
         $maxPrice = $request->query('maxPrice');
         if ($minPrice !== null && $maxPrice !== null) {
-            $query->whereBetween('price', [(int)$minPrice, (int)$maxPrice])->inRandomOrder();
+            $query->whereBetween('price', [(int)$minPrice, (int)$maxPrice]);
         }
-    
+        
         // Filter by volume
         $volume = $request->query('volume');
         if ($volume !== null) {
-            $query->where('volume', $volume)->inRandomOrder();
+            $query->where('volume', $volume);
         }
-    
+        
         // Filter by stock
         $stock = $request->query('stock');
         if ($stock !== null) {
-            $query->where('stock', $stock)->inRandomOrder();
+            $query->where('stock', $stock);
         }
+        
+        // Filter by name
         $name = $request->query('name');
         if ($name !== null) {
             $query->where('name', 'like', '%' . $name . '%'); // Partial match
         }
         
-        $includeTrending = $request->query('includeTrending');
-        if ($includeTrending) {
-            $query->inRandomOrder()->limit(5);
-        }
         // Include users if requested
         $includeUsers = $request->query('includeUsers');
         if ($includeUsers) {
             $query->with('user');
         }
-    
-        // Paginate the results
-        $products = $query->inRandomOrder()->paginate();
+
+        // Include trending products if requested
+        $includeTrending = $request->query('includeTrending');
+        if ($includeTrending) {
+            $query->inRandomOrder()->limit(5);
+            $products = $query->get(); // Directly get the results without pagination
+        } else {
+            // Apply random order for all other queries, if needed
+            $products = $query->inRandomOrder()->paginate();
+        }
+        
         \Log::info('Request data:', $request->query());
         \Log::info('SQL Query:', ['query' => $query->toSql(), 'bindings' => $query->getBindings()]);
 
         return new ProductCollection($products->appends($request->query()));
     }
+
     
 
     /**
