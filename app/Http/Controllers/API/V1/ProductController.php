@@ -47,7 +47,15 @@ class ProductController extends Controller
         if ($stock !== null) {
             $query->where('stock', $stock);
         }
-    
+        $name = $request->query('name');
+        if ($name !== null) {
+            $query->where('name', 'like', '%' . $name . '%'); // Partial match
+        }
+        
+        $includeTrending = $request->query('includeTrending');
+        if ($includeTrending) {
+            $query->inRandomOrder()->limit(5);
+        }
         // Include users if requested
         $includeUsers = $request->query('includeUsers');
         if ($includeUsers) {

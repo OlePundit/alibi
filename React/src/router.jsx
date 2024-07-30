@@ -14,6 +14,7 @@ import ProductForm from './views/productform.jsx';
 import AdminProducts from './views/adminproducts.jsx';
 import UserForm from './views/userform.jsx';
 import UserUpdate from './views/userupdate.jsx';
+import Contact from './views/contact.jsx';
 
 const router = createBrowserRouter([
     {
@@ -72,6 +73,10 @@ const router = createBrowserRouter([
                 {
                   path: '/products',
                   element: <Products />
+                },
+                {
+                  path: '/contact',
+                  element: <Contact />
                 },
                 {
                   path: '/product/detail/:id',

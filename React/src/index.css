@@ -92,7 +92,7 @@ input:focus {
     background-color: #00a762;
 }
 .btn-delete {
-    background-color: #b72424;
+    background-color: #FF0000;
 }
 
 .btn-logout {
@@ -415,6 +415,92 @@ table > tbody > tr > td {
     align-items: center;
     margin-left:0px;
 }
+.products h2{
+    text-align: start;
+    font-family: 'Lato', 'Open Sans', sans-serif;
+    font-size: 30px;
+    font-weight: 600;
+}
+.products .info{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.products .icon-box{
+    width: fit-content;
+    padding: 10px;
+    border: 1px solid #00a762;
+    border-radius: 50%;
+    color: #00a762;
+    margin-bottom: 15px;
+}
+.products .icon-box:hover{
+    background: #00a762;
+    color:#fff;
+}
+.products .info h3{
+    font-family: 'Lato', 'Open Sans', sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+
+}
+.disclaimer{
+    width:80%!important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    padding:32px 50px;
+    background:rgba(0, 167, 98, 0.2);
+
+}
+.heading-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    margin-bottom: 30px;
+  }
+  
+  .heading {
+    margin: 0;
+    padding-bottom: 5px; /* Add some space below the heading if needed */
+  }
+  
+  .heading-line {
+    width: 100%;
+    height: 3px;
+    position: relative;
+  }
+  
+  .heading-line:before {
+    content: '';
+    display: block;
+    width: 20%;
+    height: 100%;
+    background-color: #FF0000;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    transition: width 0s;
+  }
+  
+  .heading-line:after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: #F0F0F0;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  
+  .heading-container:hover .heading-line:before {
+    width: 100px; /* Adjust this value to match the width of your heading text */
+  }
+  
+  
 .slick-dots {
   position: relative!important;
   bottom: 45px!important;
@@ -657,12 +743,13 @@ input[type="range"] {
     height:fit-content;
 }
 .cart button{
-    width:fit-content;
     margin-left: 10px;
-    border: none;
-    border-radius: 8px;
-    padding: 3px 7px;
 
+}
+.cart .close{
+    display: flex;
+    justify-content: end;
+    width: 100%;
 }
 .cart ul{
     list-style-type: none;
@@ -766,6 +853,8 @@ input[type="range"] {
 
 .footer-section{
     padding-top: 100px;
+    background: #202020;
+    padding-bottom: 100px;
 }
 .footer-section .footer-wrap{
     width:70%;
@@ -786,22 +875,69 @@ input[type="range"] {
     flex-direction: column;
     padding-left: 0;
 }
+.footer-section ul li{
+    color:#fff;
+}
+.footer-section .modal-dialog ul li{
+    color:#000;
+    text-align: start;
+}
+.footer-section .modal-dialog ul li a{
+    color:#000;
+    text-align: start;
+}
 .footer-section .socials{
     display: flex;
     flex-direction: row;
 }
 .footer-section a{
     text-decoration: none;
-    color:#000;
+    color:#fff;
 }
 .footer-section a:hover{
     color:#00a762;
 }
 .footer-section h5{
     font-size: 17px;
+    color:#fff;
+
 }
 .footer-section h4{
     text-align: start;
+    color:#fff;
+
+}
+.footer-section .custom-width {
+    max-width: 80%; /* Adjust the percentage as needed */
+}
+.footer-section .modal-dialog h1{
+    text-align: start;
+}
+.footer-section .modal-dialog p{
+    text-align: start;
+}
+.footer-section .modal-dialog h2{
+    text-align: start;
+}
+.contact form{
+    border: 1px solid #F0F0F0;
+    padding: 32px 50px;
+    border-radius: 16px;
+}
+.contact .btn-add{
+    width:100%;
+}
+.contact ul{
+    list-style-type: none;
+}
+.contact ul li{
+    margin-right: 13px;
+}
+.contact .icon-f{
+    width:20px;
+}
+.contact ul li svg{
+    margin-right: 7px;
 }
 /*  ==============================================
 Responsiveness
@@ -1053,8 +1189,10 @@ Responsiveness
         font-size: 0.8rem;
     }
 }
-@media(max-width:768px){
-
+@media(max-width:575px){
+    .contact ul{
+        flex-direction: column;
+    }
 }
 @media(min-width:768px){
 
