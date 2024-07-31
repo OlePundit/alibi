@@ -32,31 +32,31 @@ class ProductController extends Controller
         $minPrice = $request->query('minPrice');
         $maxPrice = $request->query('maxPrice');
         if ($minPrice !== null && $maxPrice !== null) {
-            $query->whereBetween('price', [(int)$minPrice, (int)$maxPrice]);
+            $products = $query->whereBetween('price', [(int)$minPrice, (int)$maxPrice]);
         }
 
         // Filter by volume
         $volume = $request->query('volume');
         if ($volume !== null) {
-            $query->where('volume', $volume);
+            $products = $query->where('volume', $volume);
         }
 
         // Filter by stock
         $stock = $request->query('stock');
         if ($stock !== null) {
-            $query->where('stock', $stock);
+            $products = $query->where('stock', $stock);
         }
 
         // Filter by name
         $name = $request->query('name');
         if ($name !== null) {
-            $query->where('name', 'like', '%' . $name . '%'); // Partial match
+            $products = $query->where('name', 'like', '%' . $name . '%'); // Partial match
         }
 
         // Include users if requested
         $includeUsers = $request->query('includeUsers');
         if ($includeUsers) {
-            $query->with('user');
+            $products = $query->with('user');
         }
 
         // Include trending products if requested

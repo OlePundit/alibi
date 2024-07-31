@@ -80,6 +80,9 @@ export default function Products(){
             setLoading(false);
             console.log('these are the trendings:',data.data);
             setTrendings(data.data);
+            const trendingIds = data.data.map(trending => trending.id);
+            fetchImages(trendingIds); // Fetch images for new products only
+
 
         })
         .catch((error) => {
@@ -95,7 +98,8 @@ export default function Products(){
             setLoading(false);
             console.log('these are the wines:',data.data);
             setWines(data.data);
-
+            const wineIds = data.data.map(wine => wine.id);
+            fetchImages(wineIds); // Fetch images for new products only
         })
         .catch((error) => {
             setLoading(false);
@@ -156,7 +160,7 @@ export default function Products(){
         .then(({data})=>{
             setLoading(false);
             setProducts(prevProducts => [...prevProducts, ...data.data]); // Append new products
-            console.log(data.data);
+            console.log('filtration results',data.data);
         })
         .catch((error)=> {
             setLoading(false);
