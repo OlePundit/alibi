@@ -574,6 +574,9 @@ export default function Products(){
 
 
                             </div>
+                            <div className="row mt-3 mb-3 d-flex button-wrap justify-content-center">
+                                <button className="btn-add col-3 mx-2" onClick={handleLoadMore} disabled={loading}>Load More</button>
+                            </div>
                         </div>
                     </TabPanel>
                     <TabPanel>
@@ -627,6 +630,9 @@ export default function Products(){
                             ))}
 
 
+                            </div>
+                            <div className="row mt-3 mb-3 d-flex button-wrap justify-content-center">
+                                <button className="btn-add col-3 mx-2" onClick={handleLoadMore} disabled={loading}>Load More</button>
                             </div>
                         </div>
                     </TabPanel>
@@ -682,6 +688,9 @@ export default function Products(){
 
 
                             </div>
+                            <div className="row mt-3 mb-3 d-flex button-wrap justify-content-center">
+                                <button className="btn-add col-3 mx-2" onClick={handleLoadMore} disabled={loading}>Load More</button>
+                            </div>
                         </div>
                     </TabPanel>
                     <TabPanel>
@@ -735,6 +744,9 @@ export default function Products(){
                             ))}
 
 
+                            </div>
+                            <div className="row mt-3 mb-3 d-flex button-wrap justify-content-center">
+                                <button className="btn-add col-3 mx-2" onClick={handleLoadMore} disabled={loading}>Load More</button>
                             </div>
                         </div>
                     </TabPanel>
@@ -790,6 +802,9 @@ export default function Products(){
 
 
                             </div>
+                            <div className="row mt-3 mb-3 d-flex button-wrap justify-content-center">
+                                <button className="btn-add col-3 mx-2" onClick={handleLoadMore} disabled={loading}>Load More</button>
+                            </div>
                         </div>
                     </TabPanel>
                     <TabPanel>
@@ -843,6 +858,9 @@ export default function Products(){
                             ))}
 
 
+                            </div>
+                            <div className="row mt-3 mb-3 d-flex button-wrap justify-content-center">
+                                <button className="btn-add col-3 mx-2" onClick={handleLoadMore} disabled={loading}>Load More</button>
                             </div>
                         </div>
                     </TabPanel>
@@ -898,6 +916,9 @@ export default function Products(){
 
 
                             </div>
+                            <div className="row mt-3 mb-3 d-flex button-wrap justify-content-center">
+                                <button className="btn-add col-3 mx-2" onClick={handleLoadMore} disabled={loading}>Load More</button>
+                            </div>
                         </div>
                     </TabPanel>
                     <TabPanel>
@@ -951,6 +972,9 @@ export default function Products(){
                             ))}
 
 
+                            </div>
+                            <div className="row mt-3 mb-3 d-flex button-wrap justify-content-center">
+                                <button className="btn-add col-3 mx-2" onClick={handleLoadMore} disabled={loading}>Load More</button>
                             </div>
                         </div>
                     </TabPanel>
@@ -1006,6 +1030,9 @@ export default function Products(){
 
 
                             </div>
+                            <div className="row mt-3 mb-3 d-flex button-wrap justify-content-center">
+                                <button className="btn-add col-3 mx-2" onClick={handleLoadMore} disabled={loading}>Load More</button>
+                            </div>
                         </div>
                     </TabPanel>
                     <TabPanel>
@@ -1059,6 +1086,9 @@ export default function Products(){
                             ))}
 
 
+                            </div>
+                            <div className="row mt-3 mb-3 d-flex button-wrap justify-content-center">
+                                <button className="btn-add col-3 mx-2" onClick={handleLoadMore} disabled={loading}>Load More</button>
                             </div>
                         </div>
                     </TabPanel>
@@ -1114,6 +1144,9 @@ export default function Products(){
 
 
                             </div>
+                            <div className="row mt-3 mb-3 d-flex button-wrap justify-content-center">
+                                <button className="btn-add col-3 mx-2" onClick={handleLoadMore} disabled={loading}>Load More</button>
+                            </div>
                         </div>
                     </TabPanel>
                     <TabPanel>
@@ -1167,6 +1200,9 @@ export default function Products(){
                             ))}
 
 
+                            </div>
+                            <div className="row mt-3 mb-3 d-flex button-wrap justify-content-center">
+                                <button className="btn-add col-3 mx-2" onClick={handleLoadMore} disabled={loading}>Load More</button>
                             </div>
                         </div>
                     </TabPanel>
@@ -1222,6 +1258,9 @@ export default function Products(){
 
 
                             </div>
+                            <div className="row mt-3 mb-3 d-flex button-wrap justify-content-center">
+                                <button className="btn-add col-3 mx-2" onClick={handleLoadMore} disabled={loading}>Load More</button>
+                            </div>
                         </div>
                     </TabPanel>
                     <TabPanel>
@@ -1275,6 +1314,9 @@ export default function Products(){
                             ))}
 
 
+                            </div>
+                            <div className="row mt-3 mb-3 d-flex button-wrap justify-content-center">
+                                <button className="btn-add col-3 mx-2" onClick={handleLoadMore} disabled={loading}>Load More</button>
                             </div>
                         </div>
                     </TabPanel>
