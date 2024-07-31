@@ -27,32 +27,32 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $query = Product::query();
-        
+
         // Filter by price range
         $minPrice = $request->query('minPrice');
         $maxPrice = $request->query('maxPrice');
         if ($minPrice !== null && $maxPrice !== null) {
             $query->whereBetween('price', [(int)$minPrice, (int)$maxPrice]);
         }
-        
+
         // Filter by volume
         $volume = $request->query('volume');
         if ($volume !== null) {
             $query->where('volume', $volume);
         }
-        
+
         // Filter by stock
         $stock = $request->query('stock');
         if ($stock !== null) {
             $query->where('stock', $stock);
         }
-        
+
         // Filter by name
         $name = $request->query('name');
         if ($name !== null) {
             $query->where('name', 'like', '%' . $name . '%'); // Partial match
         }
-        
+
         // Include users if requested
         $includeUsers = $request->query('includeUsers');
         if ($includeUsers) {
@@ -66,15 +66,22 @@ class ProductController extends Controller
             $products = $query->get(); // Directly get the results without pagination
         } else {
             // Apply random order for all other queries, if needed
+            // Include wine products if requested
+            $includeWine = $request->query('includeWine');
+            if ($includeWine) {
+                $query->where('category', 'wine')->limit(5); // Adjust according to your column name for wine category
+            }
+
             $products = $query->inRandomOrder()->paginate();
             $products->appends($request->query()); // Add query parameters to the pagination links
         }
-        
+
         \Log::info('Request data:', $request->query());
         \Log::info('SQL Query:', ['query' => $query->toSql(), 'bindings' => $query->getBindings()]);
 
         return new ProductCollection($products);
     }
+
 
 
     
