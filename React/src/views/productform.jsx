@@ -5,6 +5,8 @@ import axiosClient from "../axios-client.js";
 export default function ProductForm(){
     const {id} = useParams()
     const navigate = useNavigate();
+    const [showWineOptions, setShowWineOptions] = useState(false);
+    const [showWhiskyOptions, setShowWhiskyOptions] = useState(false);
 
     const [product, setProduct] = useState({
         id: null,
@@ -14,8 +16,11 @@ export default function ProductForm(){
         price: "",
         stock: "",
         category: "",
+        sub_category:"",
         image:"",
-        discount:""
+        discount:"",
+        wineType:"",
+        whiskyType:""
       });
       const [errors, setErrors] = useState(null);
       const [loading, setLoading] = useState(false);
@@ -34,7 +39,21 @@ export default function ProductForm(){
                 })
         },[])
     }
+    
+    const handleCategoryChange = (ev) => {
+        const selectedCategory = ev.target.value;
+        setProduct({ ...product, category: selectedCategory });
+        setShowWineOptions(selectedCategory === 'wine');
+        setShowWhiskyOptions(selectedCategory === 'whisky');
 
+      };
+    
+      const handleWineTypeChange = (ev) => {
+        setProduct({ ...product, wineType: ev.target.value });
+      };
+      const handleWhiskyTypeChange = (ev) => {
+        setProduct({ ...product, whiskyType: ev.target.value });
+      };
       const onImageChoose = (ev) => {
         const file = ev.target.files[0];
         
@@ -71,6 +90,15 @@ export default function ProductForm(){
         formData.append('category', product.category);
         formData.append('discount', product.discount);
         formData.append('image', product.image);
+        // Append category-specific sub-category
+        if (product.category === 'wine') {
+            formData.append('sub_category', product.wineType);
+        } else if (product.category === 'whisky') {
+            formData.append('sub_category', product.whiskyType);
+        } else {
+            formData.append('sub_category', product.sub_category); // For other categories
+        }
+                
 
         let res = null;
 
@@ -147,7 +175,7 @@ export default function ProductForm(){
                     <option value="250ml">250ml</option>
                     <option value="other">Other</option>
                 </select>
-                <select value={product.category} onChange={ev => setProduct({...product, category: ev.target.value})} className="mb-3 form-control">
+                <select value={product.category} onChange={handleCategoryChange} className="mb-3 form-control">
                     <option value="default">Select category</option>
                     <option value="wine">Wine</option>
                     <option value="whisky">Whisky</option>
@@ -161,7 +189,6 @@ export default function ProductForm(){
                     <option value="mixers">Mixers</option>
                     <option value="bourbon">Bourbon</option>
                     <option value="cognac">Cognac</option>
-                    <option value="cognac">Cream</option>
                     <option value="mixers">Mixers</option>                    
                     <option value="tequila">Tequila</option>
                     <option value="liquer">Liquer</option>
@@ -169,6 +196,30 @@ export default function ProductForm(){
 
                     <option value="other">Other</option>
                 </select>
+                {showWineOptions && (
+                    <select
+                    value={product.wineType}
+                    onChange={handleWineTypeChange}
+                    className="mb-3 form-control"
+                    >
+                    <option value="">Select wine type</option>
+                    <option value="red_wine">Red</option>
+                    <option value="white_wine">White</option>
+                    </select>
+                )}
+                {showWhiskyOptions && (
+                    <select
+                    value={product.whiskyType}
+                    onChange={handleWhiskyTypeChange}
+                    className="mb-3 form-control"
+                    >
+                    <option value="">Select whisky type</option>
+                    <option value="bourbon">Bourbon</option>
+                    <option value="scotch">Scotch</option>
+                    <option value="single_malt">Single malt</option>
+
+                    </select>
+                )}
                 <select value={product.stock} onChange={ev => setProduct({...product, stock: ev.target.value})} className="mb-3 form-control">
                     <option value="default">Stock status</option>
                     <option value="available">available</option>

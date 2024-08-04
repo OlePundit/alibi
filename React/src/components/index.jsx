@@ -6,6 +6,7 @@ import { ShoppingCartIcon, MagnifyingGlassIcon, PhoneIcon, EnvelopeIcon } from "
 import Cart from './cart.jsx';
 import { useCart } from '../contexts/cartContext.jsx';
 import { EyeIcon, BoltIcon, LockClosedIcon, CurrencyDollarIcon } from "@heroicons/react/24/outline";
+import logo from '../assets/logo.png';
 
 export default function Index() {
     const { user, token, setUser, setToken } = useStateContext();
@@ -114,7 +115,7 @@ export default function Index() {
             <nav className="navbar navbar-expand-md navbar-light bg-light shadow-sm">
                 <div className="container">
                     <a className="navbar-brand" href="#">
-                        <img src="/storage/uploads/soko.png" alt="" width="50" height="36" className="d-inline-block align-text-top" />
+                        <img src={logo} alt="" width="50" height="36" className="d-inline-block align-text-top" />
                     </a>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>

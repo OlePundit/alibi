@@ -28,6 +28,7 @@ class StoreProductRequest extends FormRequest
             'stock'=>'required',
             'price'=>'required',
             'category'=>'required',
+            'sub_category'=>'',
             'description'=>'required',
             'discount'=>'',
             'image'=>['required','file'],

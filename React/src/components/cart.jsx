@@ -59,7 +59,7 @@ export default function Cart({ isOpen, closeCart }) {
                 <button className="btn-delete" onClick={closeCart}>Close</button>
 
             </div>
-            <div className="mt-5">
+            <div className="cart-title mt-5">
                 <h2>My Cart <span>({totalItems})</span></h2>
             </div>
             <ul>
@@ -69,7 +69,7 @@ export default function Cart({ isOpen, closeCart }) {
                             <img src={imageSrc[item.id] || ''} alt={item.name} width="50" height="50" />
                             <div>
                                 <h4>{item.name}</h4>
-                                <p>{item.quantity} x KSH {item.price}</p>
+                                <p>{item.quantity} x UGX {item.price}</p>
                             </div>
                             <form>
                                 <input
@@ -85,7 +85,7 @@ export default function Cart({ isOpen, closeCart }) {
                 ))}
             </ul>
             <h2>Order Summary</h2>
-            <p className="sub-total">Subtotal: <strong>KSH {subtotal.toFixed(2)}</strong></p>
+            <p className="sub-total">Subtotal: <strong>UGX {subtotal.toFixed(2)}</strong></p>
             <Link to="/checkout" onClick={closeCart}>
                 <button className="btn-add">Checkout</button>
             </Link>

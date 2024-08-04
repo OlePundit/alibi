@@ -28,6 +28,7 @@ class UpdateProductRequest extends FormRequest
             'stock'=>['sometimes','required'],
             'price'=>['sometimes','required'],
             'category'=>['sometimes','required'],
+            'sub_category'=>'sometimes',
             'description'=>['sometimes','required'],
             'discount'=>'sometimes',
             'image'=>['sometimes','required'],
