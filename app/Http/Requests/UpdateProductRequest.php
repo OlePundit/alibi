@@ -31,6 +31,7 @@ class UpdateProductRequest extends FormRequest
             'sub_category'=>'sometimes',
             'description'=>['sometimes','required'],
             'discount'=>'sometimes',
+            'alcohol'=>'sometimes'
             'image'=>['sometimes','required'],
             'user_id'=>'sometimes'
         ];

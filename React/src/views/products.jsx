@@ -1,20 +1,29 @@
-import { useState,useEffect } from "react";
+import { useCallback, useState,useEffect } from "react";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import axiosClient from "../axios-client.js";
 import { Link, Outlet } from 'react-router-dom';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import header from '../assets/header.png';
+import header from '../assets/header.jpg';
 import drink from '../assets/drink.png';
 import drink1 from '../assets/drink1.png';
 import cta from '../assets/cta.png';
 import liquor1 from '../assets/liquor1.jpg';
 import liquor2 from '../assets/liquor2.jpg';
 import liquor3 from '../assets/liquor3.jpg';
+import wine from '../assets/wine.png';
+import gin from '../assets/gin.png';
+import beer from '../assets/beer.png';
+import vodka from '../assets/vodka.png';
+import rum from '../assets/rum.png';
+import brandy from '../assets/brandy.png';
+import liqeur from '../assets/liqeur.png';
+import whisky from '../assets/whisky.png';
 import ReactSlider from 'react-slider';
-import { ShoppingCartIcon, EyeIcon, BoltIcon, LockClosedIcon, CurrencyDollarIcon } from "@heroicons/react/24/outline";
+import { ShoppingCartIcon, EyeIcon, BoltIcon, LockClosedIcon, CurrencyDollarIcon, ChevronDoubleRightIcon,ChevronDownIcon } from "@heroicons/react/24/outline";
 import { useCart } from '../contexts/cartContext.jsx';
+import _ from 'lodash';
 
 export default function Products(){
     const [products, setProducts] = useState([]);
@@ -64,55 +73,15 @@ export default function Products(){
         getProducts(); // Call getJobs when the component mounts
 
     }, [currentPage]); // The empty dependency array ensures it only runs once when the component 
-    useEffect(() => {
-        getTrendings(); // Call getJobs when the component mounts
-
-    }, []); // The empty dependency array ensures it only runs once when the component 
-    useEffect(() => {
-        getWines(); // Call getJobs when the component mounts
-
-    }, []); // The empty dependency array ensures it only runs once when the component 
 
     const totalPages = 1; // Assuming you have the total number of pages
 
     const handleLoadMore = () => {
         setCurrentPage(prevPage => prevPage + 1);
-      };
-
-      const getTrendings = () => {
-        setLoading(true);
-        axiosClient.get(`products?includeTrending=true`)
-        .then(({ data })=> {
-            setLoading(false);
-            console.log('these are the trendings:',data.data);
-            setTrendings(data.data);
-            const trendingIds = data.data.map(trending => trending.id);
-            fetchImages(trendingIds); // Fetch images for new products only
+    };
 
 
-        })
-        .catch((error) => {
-            setLoading(false);
-            console.error("Error fetching trending products:", error);
-        });
-    }
-
-    const getWines = () => {
-        setLoading(true);
-        axiosClient.get(`products?includeWine=true`)
-        .then(({ data })=> {
-            setLoading(false);
-            console.log('these are the wines:',data.data);
-            setWines(data.data);
-            const wineIds = data.data.map(wine => wine.id);
-            fetchImages(wineIds); // Fetch images for new products only
-        })
-        .catch((error) => {
-            setLoading(false);
-            console.error("Error fetching wines products:", error);
-        });
-    }
-    const getProducts = () => {
+    const getProducts = useCallback(_.debounce(async (params) => {
         setLoading(true);
         axiosClient.get(`/products?includeUsers=true&page=${currentPage}`)
             .then(({ data }) => {
@@ -125,7 +94,7 @@ export default function Products(){
                 setLoading(false);
                 console.error("Error fetching products:", error);
             });
-    };
+    }, 300), []);
     const fetchImages = async (productIds) => {
         try {
             const newImages = {};
@@ -183,24 +152,42 @@ export default function Products(){
 
             <div className="products">
                 <Tabs>
+                    <ul className="categories mt-3">
+                 
+                        <li class="dropdown">
+                            <Link class="dropdown-toggle" to="#" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Wine
+                            </Link>
+                            <ul class="dropdown-menu">
+                                <li><Link class="dropdown-item" to="/products/wine">all wines</Link></li>
+                                <li><Link class="dropdown-item" to="/products/wine/red_wine">Red wine</Link></li>
+                                <li><Link class="dropdown-item" to="/products/wine/white_wine">White wine</Link></li>
+                            </ul>
+                        </li>
+                 
+                        <li className="menu-item"><Link to="/products/vodka">Vodka</Link></li>
+                        <li class="dropdown">
+                            <Link class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Whisky
+                            </Link>
+                            <ul class="dropdown-menu">
+                                <li><Link class="dropdown-item" to="/products/whisky">Whisky</Link></li>
+                                <li><Link class="dropdown-item" to="/products/whisky/bourbon">Bourbon</Link></li>
+                                <li><Link class="dropdown-item" to="/products/whisky/scotch">Scotch</Link></li>
+                                <li><Link class="dropdown-item" to="/products/whisky/singlemalt">Single malt</Link></li>
+                            </ul>
+                        </li>
+                        <li className="menu-item"><Link to="/products/mixers">Mixers</Link></li>
+                        <li className="menu-item"><Link to="/products/beer">Beer</Link></li>
+                        <li className="menu-item"><Link to="/products/spirit">Spirit</Link></li>
+                        <li className="menu-item"><Link to="/products/cognac">Cognac</Link></li>
+                        <li className="menu-item"><Link to="/products/rum">Rum</Link></li>
+                        <li className="menu-item"><Link to="/products/gin">Gin</Link></li>
+                        <li className="menu-item"><Link to="/products/brandy">Brandy</Link></li>
+                        <li className="menu-item"><Link to="/products/liqeur">Liquer</Link></li>
+                    </ul>
 
                     <div className="tabs-and-slider-container container">
-                        <div className="tabs-container">
-                            <TabList className="categories mt-3">
-                                <Tab>All Drinks</Tab>
-                                <Tab>Wine</Tab>
-                                <Tab>Vodka</Tab>
-                                <Tab>Whisky</Tab>
-                                <Tab>Mixers</Tab>
-                                <Tab>Beer</Tab>
-                                <Tab>Spirit</Tab>
-                                <Tab>Cognac</Tab>
-                                <Tab>Rum</Tab>
-                                <Tab>Gin</Tab>
-                                <Tab>Brandy</Tab>
-                                <Tab>Liquer</Tab>
-                            </TabList>
-                        </div>
                         <div className="slider-container">
                             <Slider {...settings}>
                                 <div className="slider-image-container">
@@ -280,7 +267,7 @@ export default function Products(){
                                         </form>
                                     </div>
                                 </div>
-                                <img src={liquor3}></img>
+                                <img src={liquor3} className="liquor-3"></img>
                             </div> 
                         </div>
                     </div>
@@ -300,21 +287,26 @@ export default function Products(){
                                                 <div class="text">-{calculateDiscountPercentage(f.price, f.discount)}%</div>
                                             )}
                                             <div class="card-body">
-                                                <p class="font-weight-bold">{f.name} <span>{f.volume}</span></p>   
+                                                <div class="desc-wrap mb-3">
+
+                                                    <h6>Alc {p.alcohol}%</h6>
+
+                                                    <p class="font-weight-bold">{f.name} <span>{f.volume}</span></p>   
+                                                
+                                                    {
+                                                        f.discount ? (
+                                                            <div class="d-flex discount-wrap">
+                                                                <p class="strike-through">{f.price}<span> UGX </span></p> 
+                                                                <p>{calculateDiscount(f.price, f.discount)}<span> UGX </span></p> 
+                                                            </div>
+
+
+                                                        ) : (
+                                                            <p class="no-discount">{f.price}<span> UGX </span></p> 
+                
                                             
-                                                {
-                                                    f.discount ? (
-                                                        <div class="d-flex discount-wrap">
-                                                            <p class="strike-through">{f.price}<span> UGX </span></p> 
-                                                            <p>{calculateDiscount(f.price, f.discount)}<span> UGX </span></p> 
-                                                        </div>
-
-
-                                                    ) : (
-                                                        <p class="no-discount">{f.price}<span> UGX </span></p> 
-            
-                                        
-                                                )}
+                                                    )}
+                                                </div>
                                                 <div class="action-btns">
                                                 <button className="action" onClick={()=>handleAddToCart(t)}>
                                                     <ShoppingCartIcon className="icon-f" />
@@ -343,10 +335,17 @@ export default function Products(){
                                     <div className="container">
                                         <div className="row justify-content-center job-contents d-flex">
                                             <div className="heading-container">
-                                                <h2 className="heading">Top Trending</h2>
+                                                <div className="heading-wrap d-flex">
+                                                    <h2 className="heading">Top Trending</h2>
+                                                    <h5><Link to="/products/all">View all
+                                                    <ChevronDoubleRightIcon className="icon-t w-5 h-5" />
+                                                    </Link>
+                                                    </h5>
+                                                </div>
+                                        
                                                 <div className="heading-line"></div>
                                             </div>  
-                                            {trendings.map(t => (        
+                                            {products.slice(0, 5).map(t => (        
                                                 <div key={t.id} className="product-wrap box col-xl-2 col-lg-3 col-md-3 col-sm-5 col-10">          
                                                     <img src={images[t.id]} className="card-img-top rounded" style={{maxWidth:'100%'}}></img> 
                                                     {t.discount && (
@@ -354,6 +353,7 @@ export default function Products(){
                                                     )}
                                                     <div class="card-body">
                                                         <div class="desc-wrap mb-3">
+                                                            <h6>Alc {t.alcohol}%</h6>
 
                                                             <p class="font-weight-bold">{t.name} <span>{t.volume}</span></p>   
                                                         
@@ -396,14 +396,75 @@ export default function Products(){
                                         </div>
                                     </div>
                                     <div className="container">
+                                        <div className="row d-flex categories-wrap justify-content-center job-contents d-flex">
+                                            <div className="heading-container">
+                                                <div className="heading-wrap d-flex">
+
+                                                    <h2 className="heading">Browse by categories</h2>
+                                                    <h5><Link to="/products/all">View all
+                                                    <ChevronDoubleRightIcon className="icon-t w-5 h-5" />
+                                                    </Link>
+                                                    </h5>
+                                                </div>
+                                                <div className="heading-line-1"></div>
+
+                                            </div>  
+                                            <div className="img-wrap">
+                                                <Link to="/products/wine">
+                                                    <div className="img-container">
+                                                        <img className="rounded-circle" src={wine}></img>
+                                                    </div>
+                                                    <h4>Wines</h4>
+                                                </Link>
+                                            </div>
+                                            <div className="img-wrap">
+                                                <Link to="/products/whisky">
+                                                    <div className="img-container">
+                                                        <img className="rounded-circle" src={whisky}></img>
+
+                                                    </div>
+                                        
+                                                    <h4>Whisky</h4>
+                                                </Link>
+                                            </div>
+                                            <div className="img-wrap">
+                                                <Link to="/products/vodka">
+                                                    <div className="img-container">
+                                                        <img className="rounded-circle" src={vodka}></img>
+
+                                                    </div>
+                                                    <h4>Vodka</h4>
+                                                </Link>
+                                            </div>
+                                            <div className="img-wrap">
+                                                <Link to="/products/beer">
+                                                    <div className="img-container">
+                                                        <img className="rounded-circle" src={beer}></img>
+
+                                                    </div>
+                                                    <h4>Beer</h4>
+                                                </Link>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div className="container">
 
                                         <div className="row justify-content-center job-contents d-flex">
 
                                             <div className="heading-container">
-                                                <h2 className="heading">Top Wines</h2>
-                                                <div className="heading-line"></div>
+                                                <div className="heading-wrap d-flex">
+
+                                                    <h2 className="heading">Top Wines</h2>
+                                                    <h5><Link to="/products/wine">View all
+                                                    <ChevronDoubleRightIcon className="icon-t w-5 h-5" />
+                                                    </Link>
+                                                    </h5>
+                                                </div>
+                                                <div className="heading-line-2"></div>
                                             </div>  
-                                            {wines.map(w => (        
+                                            {products.slice(0, 5).filter(p => p.category === 'wine').map(w => (
+
                                                     <div key={w.id} className="product-wrap box col-xl-2 col-lg-3 col-md-3 col-sm-5 col-10">          
                                                         <img src={images[w.id]} className="card-img-top rounded" style={{maxWidth:'100%'}}></img> 
                                                         {w.discount && (
@@ -411,6 +472,7 @@ export default function Products(){
                                                         )}
                                                         <div class="card-body">
                                                             <div class="desc-wrap mb-3">
+                                                                <h6>Alc {w.alcohol}%</h6>
 
                                                                 <p class="font-weight-bold">{w.name} <span>{w.volume}</span></p>   
                                                             
@@ -452,6 +514,59 @@ export default function Products(){
                                                 ))}
                                         </div>
                                     </div>
+                                    <div className="container">
+                                        <div className="row d-flex categories-wrap justify-content-center job-contents d-flex">
+                                            <div className="heading-container">
+                                                <div className="heading-wrap d-flex">
+
+                                                    <h2 className="heading">More categories</h2>
+                                                    <h5><Link to="/products/all">View all
+                                                    <ChevronDoubleRightIcon className="icon-t w-5 h-5" />
+                                                    </Link>
+                                                    </h5>
+                                                </div>
+                                                <div className="heading-line-3"></div>
+                                            </div>  
+                                            <div className="img-wrap">
+                                                <Link to="/products/wine">
+                                                    <div className="img-container">
+                                                        <img className="rounded-circle" src={rum}></img>
+                                                    </div>
+                                                    <h4>Rum</h4>
+                                                </Link>
+                                            </div>
+                                            <div className="img-wrap">
+                                                <Link to="/products/gin">
+                                                    <div className="img-container">
+                                                        <img className="rounded-circle" src={gin}></img>
+
+                                                    </div>
+                                        
+                                                    <h4>Gin</h4>
+                                                </Link>
+                                            </div>
+                                            <div className="img-wrap">
+                                                <Link to="/products/brandy">
+                                                    <div className="img-container">
+                                                        <img className="rounded-circle" src={brandy}></img>
+
+                                                    </div>
+                                                    <h4>Brandy</h4>
+                                                </Link>
+                                            </div>
+                                            <div className="img-wrap">
+                                                <Link to="/products/liqeur">
+                                                    <div className="img-container">
+                                                        <img className="rounded-circle" src={liqeur}></img>
+
+                                                    </div>
+                                                    <h4>Liqeur</h4>
+                                                </Link>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                              
                                     <div class="cta-background">
        
                                     
@@ -474,8 +589,15 @@ export default function Products(){
 
                                         <div className="row justify-content-center job-contents d-flex">
                                             <div className="heading-container">
-                                                <h2 className="heading">More Products</h2>
-                                                <div className="heading-line"></div>
+                                                <div className="heading-wrap d-flex">
+
+                                                    <h2 className="heading">More Products</h2>
+                                                    <h5><Link to="/products/all">View all
+                                                    <ChevronDoubleRightIcon className="icon-t w-5 h-5" />
+                                                    </Link>
+                                                    </h5>
+                                                </div>
+                                                <div className="heading-line-4"></div>
                                             </div>  
                                             {products.map(p => (        
                                                 <div key={p.id} className="product-wrap box col-xl-2 col-lg-3 col-md-3 col-sm-5 col-10">          
@@ -485,7 +607,7 @@ export default function Products(){
                                                     )}
                                                     <div class="card-body">
                                                         <div class="desc-wrap mb-3">
-
+                                                            <h6>Alc {p.alcohol}%</h6>
                                                             <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>   
                                                         
                                                             {
@@ -579,1004 +701,6 @@ export default function Products(){
                                 </div>
                             </div>
 
-                        </div>
-                    </TabPanel>
-                    <TabPanel>
-
-                        <div className="container">
-                        <Tabs>
-                            <TabList className="wine-sub">
-                                <Tab>Red Wine</Tab>
-                                <Tab>White Wine</Tab>
-                            </TabList>
-                            <TabPanel>
-                            <div className="row justify-content-center job-contents d-flex">
-                                <div className="heading-container">
-                                    <h2 className="heading">Red Wine</h2>
-                                    <div className="heading-line"></div>
-                                </div>   
-                                {products.filter(p => p.sub_category === 'red').map (p => (        
-                                        <div key={p.id} className="product-wrap box col-xl-2 col-lg-3 col-md-3 col-sm-5 col-10">          
-                                        <img src={images[p.id]} className="card-img-top rounded" style={{maxWidth:'100%'}}></img> 
-                                        {p.discount && (
-                                            <div class="text">-{calculateDiscountPercentage(p.price, p.discount)}%</div>
-                                        )}
-                                        <div class="card-body">
-                                            <div class="desc-wrap mb-3">
-
-                                                <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>   
-                                            
-                                                {
-                                                    p.discount ? (
-                                                        <div class="d-flex discount-wrap">
-                                                            <p class="strike-through">{p.price}<span> UGX </span></p> 
-                                                            <p>{calculateDiscount(p.price, p.discount)}<span> UGX </span></p> 
-                                                        </div>
-
-
-                                                    ) : (
-                                                        <p class="no-discount">{p.price}<span> UGX </span></p> 
-
-                                        
-                                                )}
-                                            </div>
-                                            <div class="action-btns">
-                                                <button className="action" onClick={()=>handleAddToCart(p)}>
-                                                <ShoppingCartIcon className="icon-f" />
-
-                                                </button>
-
-                                                <Link to={`https://wa.me/?text=${productDetailLink(p.id)}`} className="action">
-
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
-                                                        <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
-                                                    </svg>
-                                                </Link>
-                                                <Link to={`/product/detail/${p.id}`} className="action">
-                                                    <EyeIcon className="icon-f w-5 h-5" />
-
-                                                </Link>
-
-                                            </div>
-                                        </div> 
-                                    </div>
-
-                                ))}
-
-
-                            </div>
-                            </TabPanel>
-                            <TabPanel>
-                            <div className="row justify-content-center job-contents d-flex">
-                                <div className="heading-container">
-                                    <h2 className="heading">White Wine</h2>
-                                    <div className="heading-line"></div>
-                                </div>  
-                                {products.filter(p => p.sub_category === 'white_wine').map (p => (        
-                                        <div key={p.id} className="product-wrap box col-xl-2 col-lg-3 col-md-3 col-sm-5 col-10">          
-                                        <img src={images[p.id]} className="card-img-top rounded" style={{maxWidth:'100%'}}></img> 
-                                        {p.discount && (
-                                            <div class="text">-{calculateDiscountPercentage(p.price, p.discount)}%</div>
-                                        )}
-                                        <div class="card-body">
-                                            <div class="desc-wrap mb-3">
-
-                                                <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>   
-                                            
-                                                {
-                                                    p.discount ? (
-                                                        <div class="d-flex discount-wrap">
-                                                            <p class="strike-through">{p.price}<span> UGX </span></p> 
-                                                            <p>{calculateDiscount(p.price, p.discount)}<span> UGX </span></p> 
-                                                        </div>
-
-
-                                                    ) : (
-                                                        <p class="no-discount">{p.price}<span> UGX </span></p> 
-
-                                        
-                                                )}
-                                            </div>
-                                            <div class="action-btns">
-                                                <button className="action" onClick={()=>handleAddToCart(p)}>
-                                                <ShoppingCartIcon className="icon-f" />
-
-                                                </button>
-
-                                                <Link to={`https://wa.me/?text=${productDetailLink(p.id)}`} className="action">
-
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
-                                                        <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
-                                                    </svg>
-                                                </Link>
-                                                <Link to={`/product/detail/${p.id}`} className="action">
-                                                    <EyeIcon className="icon-f w-5 h-5" />
-
-                                                </Link>
-
-                                            </div>
-                                        </div> 
-                                    </div>
-
-                                ))}
-
-
-                            </div>
-                            </TabPanel>
-                        </Tabs>
-                            <div className="row justify-content-center job-contents d-flex">
-                                <div className="heading-container">
-                                    <h2 className="heading">Wines</h2>
-                                    <div className="heading-line"></div>
-                                </div>   
-
-                                {products.filter(p => p.category === 'wine').map (p => (        
-                                        <div key={p.id} className="product-wrap box col-xl-2 col-lg-3 col-md-3 col-sm-5 col-10">          
-                                        <img src={images[p.id]} className="card-img-top rounded" style={{maxWidth:'100%'}}></img> 
-                                        {p.discount && (
-                                            <div class="text">-{calculateDiscountPercentage(p.price, p.discount)}%</div>
-                                        )}
-                                        <div class="card-body">
-                                            <div class="desc-wrap mb-3">
-
-                                                <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>   
-                                            
-                                                {
-                                                    p.discount ? (
-                                                        <div class="d-flex discount-wrap">
-                                                            <p class="strike-through">{p.price}<span> UGX </span></p> 
-                                                            <p>{calculateDiscount(p.price, p.discount)}<span> UGX </span></p> 
-                                                        </div>
-
-
-                                                    ) : (
-                                                        <p class="no-discount">{p.price}<span> UGX </span></p> 
-            
-                                        
-                                                )}
-                                            </div>
-                                            <div class="action-btns">
-                                                <button className="action" onClick={()=>handleAddToCart(p)}>
-                                                <ShoppingCartIcon className="icon-f" />
-
-                                                </button>
-
-                                                <Link to={`https://wa.me/?text=${productDetailLink(p.id)}`} className="action">
-
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
-                                                        <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
-                                                    </svg>
-                                                </Link>
-                                                <Link to={`/product/detail/${p.id}`} className="action">
-                                                    <EyeIcon className="icon-f w-5 h-5" />
-
-                                                </Link>
-
-                                            </div>
-                                        </div> 
-                                    </div>
-
-                                ))}
-
-
-                            </div>
-                            <div className="row mt-3 mb-3 d-flex button-wrap justify-content-center">
-                                <button className="btn-add col-3 mx-2" onClick={handleLoadMore} disabled={loading}>Load More</button>
-                            </div>
-                        </div>
-                    </TabPanel>
-                    <TabPanel>
-
-                        <div className="container">
-                            <div className="row justify-content-center job-contents d-flex">
-                                <div className="heading-container">
-                                    <h2 className="heading">Vodka</h2>
-                                    <div className="heading-line"></div>
-                                </div>  
-                                {products.filter(p => p.category === 'vodka').map (p => (        
-                                    <div key={p.id} className="product-wrap box col-xl-2 col-lg-3 col-md-3 col-sm-5 col-10">          
-                                        <img src={images[p.id]} className="card-img-top rounded" style={{maxWidth:'100%'}}></img> 
-                                        {p.discount && (
-                                            <div class="text">-{calculateDiscountPercentage(p.price, p.discount)}%</div>
-                                        )}
-                                        <div class="card-body">
-                                            <div class="desc-wrap mb-3">
-
-                                            <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>   
-                                            
-                                                {
-                                                    p.discount ? (
-                                                        <div class="d-flex discount-wrap">
-                                                            <p class="strike-through">{p.price}<span> UGX </span></p> 
-                                                            <p>{calculateDiscount(p.price, p.discount)}<span> UGX </span></p> 
-                                                        </div>
-
-
-                                                    ) : (
-                                                        <p class="no-discount">{p.price}<span> UGX </span></p> 
-            
-                                        
-                                                )}
-                                            </div>
-                                            <div class="action-btns">
-                                                <button className="action" onClick={()=>handleAddToCart(p)}>
-                                                <ShoppingCartIcon className="icon-f" />
-
-                                                </button>
-
-                                                <Link to={`https://wa.me/?text=${productDetailLink(p.id)}`} className="action">
-
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
-                                                        <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
-                                                    </svg>
-                                                </Link>
-                                                <Link to={`/product/detail/${p.id}`} className="action">
-                                                    <EyeIcon className="icon-f w-5 h-5" />
-
-                                                </Link>
-
-                                            </div>
-                                        </div> 
-                                    </div>
-
-                            ))}
-
-
-                            </div>
-                            <div className="row mt-3 mb-3 d-flex button-wrap justify-content-center">
-                                <button className="btn-add col-3 mx-2" onClick={handleLoadMore} disabled={loading}>Load More</button>
-                            </div>
-                        </div>
-                    </TabPanel>
-                    <TabPanel>
-
-                        <div className="container">
-                        <Tabs>
-                            <TabList className="wine-sub">
-                                <Tab>Scotch</Tab>
-                                <Tab>Bourbon</Tab>
-                                <Tab>Single Malt</Tab>
-                            </TabList>
-                            <TabPanel>
-                            <div className="row justify-content-center job-contents d-flex">
-                                <div className="heading-container">
-                                    <h2 className="heading">Red Wine</h2>
-                                    <div className="heading-line"></div>
-                                </div>   
-                                {products.filter(p => p.sub_category === 'scotch').map (p => (        
-                                        <div key={p.id} className="product-wrap box col-xl-2 col-lg-3 col-md-3 col-sm-5 col-10">          
-                                        <img src={images[p.id]} className="card-img-top rounded" style={{maxWidth:'100%'}}></img> 
-                                        {p.discount && (
-                                            <div class="text">-{calculateDiscountPercentage(p.price, p.discount)}%</div>
-                                        )}
-                                        <div class="card-body">
-                                            <div class="desc-wrap mb-3">
-
-                                                <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>   
-                                            
-                                                {
-                                                    p.discount ? (
-                                                        <div class="d-flex discount-wrap">
-                                                            <p class="strike-through">{p.price}<span> UGX </span></p> 
-                                                            <p>{calculateDiscount(p.price, p.discount)}<span> UGX </span></p> 
-                                                        </div>
-
-
-                                                    ) : (
-                                                        <p class="no-discount">{p.price}<span> UGX </span></p> 
-
-                                        
-                                                )}
-                                            </div>
-                                            <div class="action-btns">
-                                                <button className="action" onClick={()=>handleAddToCart(p)}>
-                                                <ShoppingCartIcon className="icon-f" />
-
-                                                </button>
-
-                                                <Link to={`https://wa.me/?text=${productDetailLink(p.id)}`} className="action">
-
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
-                                                        <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
-                                                    </svg>
-                                                </Link>
-                                                <Link to={`/product/detail/${p.id}`} className="action">
-                                                    <EyeIcon className="icon-f w-5 h-5" />
-
-                                                </Link>
-
-                                            </div>
-                                        </div> 
-                                    </div>
-
-                                ))}
-
-
-                            </div>
-                            </TabPanel>
-                            <TabPanel>
-                            <div className="row justify-content-center job-contents d-flex">
-                                <div className="heading-container">
-                                    <h2 className="heading">Red Wine</h2>
-                                    <div className="heading-line"></div>
-                                </div>   
-                                {products.filter(p => p.sub_category === 'bourbon').map (p => (        
-                                        <div key={p.id} className="product-wrap box col-xl-2 col-lg-3 col-md-3 col-sm-5 col-10">          
-                                        <img src={images[p.id]} className="card-img-top rounded" style={{maxWidth:'100%'}}></img> 
-                                        {p.discount && (
-                                            <div class="text">-{calculateDiscountPercentage(p.price, p.discount)}%</div>
-                                        )}
-                                        <div class="card-body">
-                                            <div class="desc-wrap mb-3">
-
-                                                <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>   
-                                            
-                                                {
-                                                    p.discount ? (
-                                                        <div class="d-flex discount-wrap">
-                                                            <p class="strike-through">{p.price}<span> UGX </span></p> 
-                                                            <p>{calculateDiscount(p.price, p.discount)}<span> UGX </span></p> 
-                                                        </div>
-
-
-                                                    ) : (
-                                                        <p class="no-discount">{p.price}<span> UGX </span></p> 
-
-                                        
-                                                )}
-                                            </div>
-                                            <div class="action-btns">
-                                                <button className="action" onClick={()=>handleAddToCart(p)}>
-                                                <ShoppingCartIcon className="icon-f" />
-
-                                                </button>
-
-                                                <Link to={`https://wa.me/?text=${productDetailLink(p.id)}`} className="action">
-
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
-                                                        <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
-                                                    </svg>
-                                                </Link>
-                                                <Link to={`/product/detail/${p.id}`} className="action">
-                                                    <EyeIcon className="icon-f w-5 h-5" />
-
-                                                </Link>
-
-                                            </div>
-                                        </div> 
-                                    </div>
-
-                                ))}
-
-
-                            </div>
-                            </TabPanel>
-                            <TabPanel>
-                            <div className="row justify-content-center job-contents d-flex">
-                                <div className="heading-container">
-                                    <h2 className="heading">Red Wine</h2>
-                                    <div className="heading-line"></div>
-                                </div>   
-                                {products.filter(p => p.sub_category === 'single_malt').map (p => (        
-                                        <div key={p.id} className="product-wrap box col-xl-2 col-lg-3 col-md-3 col-sm-5 col-10">          
-                                        <img src={images[p.id]} className="card-img-top rounded" style={{maxWidth:'100%'}}></img> 
-                                        {p.discount && (
-                                            <div class="text">-{calculateDiscountPercentage(p.price, p.discount)}%</div>
-                                        )}
-                                        <div class="card-body">
-                                            <div class="desc-wrap mb-3">
-
-                                                <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>   
-                                            
-                                                {
-                                                    p.discount ? (
-                                                        <div class="d-flex discount-wrap">
-                                                            <p class="strike-through">{p.price}<span> UGX </span></p> 
-                                                            <p>{calculateDiscount(p.price, p.discount)}<span> UGX </span></p> 
-                                                        </div>
-
-
-                                                    ) : (
-                                                        <p class="no-discount">{p.price}<span> UGX </span></p> 
-
-                                        
-                                                )}
-                                            </div>
-                                            <div class="action-btns">
-                                                <button className="action" onClick={()=>handleAddToCart(p)}>
-                                                <ShoppingCartIcon className="icon-f" />
-
-                                                </button>
-
-                                                <Link to={`https://wa.me/?text=${productDetailLink(p.id)}`} className="action">
-
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
-                                                        <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
-                                                    </svg>
-                                                </Link>
-                                                <Link to={`/product/detail/${p.id}`} className="action">
-                                                    <EyeIcon className="icon-f w-5 h-5" />
-
-                                                </Link>
-
-                                            </div>
-                                        </div> 
-                                    </div>
-
-                                ))}
-
-
-                            </div>
-                            </TabPanel>
-                        </Tabs>
-                            <div className="row justify-content-center job-contents d-flex">
-                                <div className="heading-container">
-                                    <h2 className="heading">Whisky</h2>
-                                    <div className="heading-line"></div>
-                                </div>  
-
-                            {products.filter(p => p.category === 'whisky').map (p => (        
-                                        <div key={p.id} className="product-wrap box col-xl-2 col-lg-3 col-md-3 col-sm-5 col-10">          
-                                        <img src={images[p.id]} className="card-img-top rounded" style={{maxWidth:'100%'}}></img> 
-                                        {p.discount && (
-                                            <div class="text">-{calculateDiscountPercentage(p.price, p.discount)}%</div>
-                                        )}
-                                        <div class="card-body">
-                                            <div class="desc-wrap mb-3">
-
-                                                <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>   
-                                            
-                                                {
-                                                    p.discount ? (
-                                                        <div class="d-flex discount-wrap">
-                                                            <p class="strike-through">{p.price}<span> UGX </span></p> 
-                                                            <p>{calculateDiscount(p.price, p.discount)}<span> UGX </span></p> 
-                                                        </div>
-
-
-                                                    ) : (
-                                                        <p class="no-discount">{p.price}<span> UGX </span></p> 
-            
-                                        
-                                                )}
-                                            </div>
-                                            <div class="action-btns">
-                                                <button className="action" onClick={()=>handleAddToCart(p)}>
-                                                <ShoppingCartIcon className="icon-f" />
-
-                                                </button>
-
-                                                <Link to={`https://wa.me/?text=${productDetailLink(p.id)}`} className="action">
-
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
-                                                        <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
-                                                    </svg>
-                                                </Link>
-                                                <Link to={`/product/detail/${p.id}`} className="action">
-                                                    <EyeIcon className="icon-f w-5 h-5" />
-
-                                                </Link>
-
-                                            </div>
-                                        </div> 
-                                    </div>
-
-                            ))}
-
-
-                            </div>
-                            <div className="row mt-3 mb-3 d-flex button-wrap justify-content-center">
-                                <button className="btn-add col-3 mx-2" onClick={handleLoadMore} disabled={loading}>Load More</button>
-                            </div>
-                        </div>
-                    </TabPanel>
-                    <TabPanel>
-
-                        <div className="container">
-                            <div className="row justify-content-center job-contents d-flex">
-                                <div className="heading-container">
-                                    <h2 className="heading">Mixers</h2>
-                                    <div className="heading-line"></div>
-                                </div>  
-                            {products.filter(p => p.category === 'mixers').map (p => (        
-                                        <div key={p.id} className="product-wrap box col-xl-2 col-lg-3 col-md-3 col-sm-5 col-10">          
-                                        <img src={images[p.id]} className="card-img-top rounded" style={{maxWidth:'100%'}}></img> 
-                                        {p.discount && (
-                                            <div class="text">-{calculateDiscountPercentage(p.price, p.discount)}%</div>
-                                        )}
-                                        <div class="card-body">
-                                            <div class="desc-wrap mb-3">
-
-                                                <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>   
-                                            
-                                                {
-                                                    p.discount ? (
-                                                        <div class="d-flex discount-wrap">
-                                                            <p class="strike-through">{p.price}<span> UGX </span></p> 
-                                                            <p>{calculateDiscount(p.price, p.discount)}<span> UGX </span></p> 
-                                                        </div>
-
-
-                                                    ) : (
-                                                        <p class="no-discount">{p.price}<span> UGX </span></p> 
-            
-                                        
-                                                )}
-                                            </div>
-                                            <div class="action-btns">
-                                                <button className="action" onClick={()=>handleAddToCart(p)}>
-                                                <ShoppingCartIcon className="icon-f" />
-
-                                                </button>
-
-                                                <Link to={`https://wa.me/?text=${productDetailLink(p.id)}`} className="action">
-
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
-                                                        <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
-                                                    </svg>
-                                                </Link>
-                                                <Link to={`/product/detail/${p.id}`} className="action">
-                                                    <EyeIcon className="icon-f w-5 h-5" />
-
-                                                </Link>
-
-                                            </div>
-                                        </div> 
-                                    </div>
-
-                            ))}
-
-
-                            </div>
-                            <div className="row mt-3 mb-3 d-flex button-wrap justify-content-center">
-                                <button className="btn-add col-3 mx-2" onClick={handleLoadMore} disabled={loading}>Load More</button>
-                            </div>
-                        </div>
-                    </TabPanel>
-                    <TabPanel>
-
-                        <div className="container">
-                            <div className="row justify-content-center job-contents d-flex">
-                                <div className="heading-container">
-                                    <h2 className="heading">Beer</h2>
-                                    <div className="heading-line"></div>
-                                </div>  
-                            {products.filter(p => p.category === 'beer').map (p => (        
-                                        <div key={p.id} className="product-wrap box col-xl-2 col-lg-3 col-md-3 col-sm-5 col-10">          
-                                        <img src={images[p.id]} className="card-img-top rounded" style={{maxWidth:'100%'}}></img> 
-                                        {p.discount && (
-                                            <div class="text">-{calculateDiscountPercentage(p.price, p.discount)}%</div>
-                                        )}
-                                        <div class="card-body">
-                                            <div class="desc-wrap mb-3">
-
-                                                <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>   
-                                            
-                                                {
-                                                    p.discount ? (
-                                                        <div class="d-flex discount-wrap">
-                                                            <p class="strike-through">{p.price}<span> UGX </span></p> 
-                                                            <p>{calculateDiscount(p.price, p.discount)}<span> UGX </span></p> 
-                                                        </div>
-
-
-                                                    ) : (
-                                                        <p class="no-discount">{p.price}<span> UGX </span></p> 
-            
-                                        
-                                                )}
-                                            </div>
-                                            <div class="action-btns">
-                                                <button className="action" onClick={()=>handleAddToCart(p)}>
-                                                <ShoppingCartIcon className="icon-f" />
-
-                                                </button>
-
-                                                <Link to={`https://wa.me/?text=${productDetailLink(p.id)}`} className="action">
-
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
-                                                        <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
-                                                    </svg>
-                                                </Link>
-                                                <Link to={`/product/detail/${p.id}`} className="action">
-                                                    <EyeIcon className="icon-f w-5 h-5" />
-
-                                                </Link>
-
-                                            </div>
-                                        </div> 
-                                    </div>
-
-                            ))}
-
-
-                            </div>
-                            <div className="row mt-3 mb-3 d-flex button-wrap justify-content-center">
-                                <button className="btn-add col-3 mx-2" onClick={handleLoadMore} disabled={loading}>Load More</button>
-                            </div>
-                        </div>
-                    </TabPanel>
-
-                    <TabPanel>
-
-                        <div class="container">
-                            <div className="row justify-content-center job-contents d-flex">
-                                <div className="heading-container">
-                                    <h2 className="heading">Spirit</h2>
-                                    <div className="heading-line"></div>
-                                </div>  
-                            {products.filter(p => p.category === 'spirit').map (p => (        
-                                        <div key={p.id} className="product-wrap box col-xl-2 col-lg-3 col-md-3 col-sm-5 col-10">          
-                                        <img src={images[p.id]} className="card-img-top rounded" style={{maxWidth:'100%'}}></img> 
-                                        {p.discount && (
-                                            <div class="text">-{calculateDiscountPercentage(p.price, p.discount)}%</div>
-                                        )}
-                                        <div class="card-body">
-                                            <div class="desc-wrap mb-3">
-
-                                                <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>   
-                                            
-                                                {
-                                                    p.discount ? (
-                                                        <div class="d-flex discount-wrap">
-                                                            <p class="strike-through">{p.price}<span> UGX </span></p> 
-                                                            <p>{calculateDiscount(p.price, p.discount)}<span> UGX </span></p> 
-                                                        </div>
-
-
-                                                    ) : (
-                                                        <p class="no-discount">{p.price}<span> UGX </span></p> 
-            
-                                        
-                                                )}
-                                            </div>
-                                            <div class="action-btns">
-                                                <button className="action" onClick={()=>handleAddToCart(p)}>
-                                                <ShoppingCartIcon className="icon-f" />
-
-                                                </button>
-
-                                                <Link to={`https://wa.me/?text=${productDetailLink(p.id)}`} className="action">
-
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
-                                                        <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
-                                                    </svg>
-                                                </Link>
-                                                <Link to={`/product/detail/${p.id}`} className="action">
-                                                    <EyeIcon className="icon-f w-5 h-5" />
-
-                                                </Link>
-
-                                            </div>
-                                        </div> 
-                                    </div>
-
-                            ))}
-
-
-                            </div>
-                            <div className="row mt-3 mb-3 d-flex button-wrap justify-content-center">
-                                <button className="btn-add col-3 mx-2" onClick={handleLoadMore} disabled={loading}>Load More</button>
-                            </div>
-                        </div>
-                    </TabPanel>
-                    <TabPanel>
-
-                        <div className="container">
-                            <div className="row justify-content-center job-contents d-flex">
-                                <div className="heading-container">
-                                    <h2 className="heading">Cognac</h2>
-                                    <div className="heading-line"></div>
-                                </div>  
-                            {products.filter(p => p.category === 'cognac').map (p => (        
-                                        <div key={p.id} className="product-wrap box col-xl-2 col-lg-3 col-md-3 col-sm-5 col-10">          
-                                        <img src={images[p.id]} className="card-img-top rounded" style={{maxWidth:'100%'}}></img> 
-                                        {p.discount && (
-                                            <div class="text">-{calculateDiscountPercentage(p.price, p.discount)}%</div>
-                                        )}
-                                            <div class="card-body">
-                                                <div class="desc-wrap mb-3">
-
-                                                <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>   
-                                            
-                                                {
-                                                    p.discount ? (
-                                                        <div class="d-flex discount-wrap">
-                                                            <p class="strike-through">{p.price}<span> UGX </span></p> 
-                                                            <p>{calculateDiscount(p.price, p.discount)}<span> UGX </span></p> 
-                                                        </div>
-
-
-                                                    ) : (
-                                                        <p class="no-discount">{p.price}<span> UGX </span></p> 
-            
-                                        
-                                                )}
-                                            </div>
-                                            <div class="action-btns">
-                                                <button className="action" onClick={()=>handleAddToCart(p)}>
-                                                <ShoppingCartIcon className="icon-f" />
-
-                                                </button>
-
-                                                <Link to={`https://wa.me/?text=${productDetailLink(p.id)}`} className="action">
-
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
-                                                        <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
-                                                    </svg>
-                                                </Link>
-                                                <Link to={`/product/detail/${p.id}`} className="action">
-                                                    <EyeIcon className="icon-f w-5 h-5" />
-
-                                                </Link>
-
-                                            </div>
-                                        </div> 
-                                    </div>
-
-                            ))}
-
-
-                            </div>
-                            <div className="row mt-3 mb-3 d-flex button-wrap justify-content-center">
-                                <button className="btn-add col-3 mx-2" onClick={handleLoadMore} disabled={loading}>Load More</button>
-                            </div>
-                        </div>
-                    </TabPanel>
-
-                    <TabPanel>
-
-                        <div className="container">
-                            <div className="row justify-content-center job-contents d-flex">
-                                <div className="heading-container">
-                                    <h2 className="heading">Rum</h2>
-                                    <div className="heading-line"></div>
-                                </div>  
-                            {products.filter(p => p.category === 'rum').map (p => (        
-                                        <div key={p.id} className="product-wrap box col-xl-2 col-lg-3 col-md-3 col-sm-5 col-10">          
-                                        <img src={images[p.id]} className="card-img-top rounded" style={{maxWidth:'100%'}}></img> 
-                                        {p.discount && (
-                                            <div class="text">-{calculateDiscountPercentage(p.price, p.discount)}%</div>
-                                        )}
-                                        <div class="card-body">
-                                            <div class="desc-wrap mb-3">
-
-                                                <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>   
-                                            
-                                                {
-                                                    p.discount ? (
-                                                        <div class="d-flex discount-wrap">
-                                                            <p class="strike-through">{p.price}<span> UGX </span></p> 
-                                                            <p>{calculateDiscount(p.price, p.discount)}<span> UGX </span></p> 
-                                                        </div>
-
-
-                                                    ) : (
-                                                        <p class="no-discount">{p.price}<span> UGX </span></p> 
-            
-                                        
-                                                )}
-                                            </div>
-                                            <div class="action-btns">
-                                                <button className="action" onClick={()=>handleAddToCart(p)}>
-                                                <ShoppingCartIcon className="icon-f" />
-
-                                                </button>
-
-                                                <Link to={`https://wa.me/?text=${productDetailLink(p.id)}`} className="action">
-
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
-                                                        <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
-                                                    </svg>
-                                                </Link>
-                                                <Link to={`/product/detail/${p.id}`} className="action">
-                                                    <EyeIcon className="icon-f w-5 h-5" />
-
-                                                </Link>
-
-                                            </div>
-                                        </div> 
-                                    </div>
-
-                            ))}
-
-
-                            </div>
-                            <div className="row mt-3 mb-3 d-flex button-wrap justify-content-center">
-                                <button className="btn-add col-3 mx-2" onClick={handleLoadMore} disabled={loading}>Load More</button>
-                            </div>
-                        </div>
-                    </TabPanel>
-                    <TabPanel>
-
-                        <div className="container">
-                            <div className="row justify-content-center job-contents d-flex">
-                                <div className="heading-container">
-                                    <h2 className="heading">Gin</h2>
-                                    <div className="heading-line"></div>
-                                </div>  
-                            {products.filter(p => p.category === 'gin').map (p => (        
-                                        <div key={p.id} className="product-wrap box col-xl-2 col-lg-3 col-md-3 col-sm-5 col-10">          
-                                        <img src={images[p.id]} className="card-img-top rounded" style={{maxWidth:'100%'}}></img> 
-                                        {p.discount && (
-                                            <div class="text">-{calculateDiscountPercentage(p.price, p.discount)}%</div>
-                                        )}
-                                        <div class="card-body">
-                                            <div class="desc-wrap mb-3">
-
-                                                <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>   
-                                            
-                                                {
-                                                    p.discount ? (
-                                                        <div class="d-flex discount-wrap">
-                                                            <p class="strike-through">{p.price}<span> UGX </span></p> 
-                                                            <p>{calculateDiscount(p.price, p.discount)}<span> UGX </span></p> 
-                                                        </div>
-
-
-                                                    ) : (
-                                                        <p class="no-discount">{p.price}<span> UGX </span></p> 
-            
-                                        
-                                                )}
-                                            </div>
-                                            <div class="action-btns">
-                                            <button className="action" onClick={()=>handleAddToCart(p)}>
-                                            <ShoppingCartIcon className="icon-f" />
-
-                                            </button>
-
-                                            <Link to={`https://wa.me/?text=${productDetailLink(p.id)}`} className="action">
-
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
-                                                        <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
-                                                    </svg>
-                                                </Link>
-                                                <Link to={`/product/detail/${p.id}`} className="action">
-                                                    <EyeIcon className="icon-f w-5 h-5" />
-
-                                                </Link>
-
-                                            </div>
-                                        </div> 
-                                    </div>
-
-                            ))}
-
-
-                            </div>
-                            <div className="row mt-3 mb-3 d-flex button-wrap justify-content-center">
-                                <button className="btn-add col-3 mx-2" onClick={handleLoadMore} disabled={loading}>Load More</button>
-                            </div>
-                        </div>
-                    </TabPanel>
-                    <TabPanel>
-
-                        <div className="container">
-                            <div className="row justify-content-center job-contents d-flex">
-                                <div className="heading-container">
-                                    <h2 className="heading">Brandy</h2>
-                                    <div className="heading-line"></div>
-                                </div>  
-                            {products.filter(p => p.category === 'brandy').map (p => (        
-                                        <div key={p.id} className="product-wrap box col-xl-2 col-lg-3 col-md-3 col-sm-5 col-10">          
-                                        <img src={images[p.id]} className="card-img-top rounded" style={{maxWidth:'100%'}}></img> 
-                                        {p.discount && (
-                                            <div class="text">-{calculateDiscountPercentage(p.price, p.discount)}%</div>
-                                        )}
-                                        <div class="card-body">
-                                            <div class="desc-wrap mb-3">
-
-                                                <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>   
-                                            
-                                                {
-                                                    p.discount ? (
-                                                        <div class="d-flex discount-wrap">
-                                                            <p class="strike-through">{p.price}<span> UGX </span></p> 
-                                                            <p>{calculateDiscount(p.price, p.discount)}<span> UGX </span></p> 
-                                                        </div>
-
-
-                                                    ) : (
-                                                        <p class="no-discount">{p.price}<span> UGX </span></p> 
-            
-                                        
-                                                )}
-                                            </div>
-                                            <div class="action-btns">
-                                                <button className="action" onClick={()=>handleAddToCart(p)}>
-                                                <ShoppingCartIcon className="icon-f" />
-
-                                                </button>
-
-                                                <Link to={`https://wa.me/?text=${productDetailLink(p.id)}`} className="action">
-
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
-                                                        <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
-                                                    </svg>
-                                                </Link>
-                                                <Link to={`/product/detail/${p.id}`} className="action">
-                                                    <EyeIcon className="icon-f w-5 h-5" />
-
-                                                </Link>
-
-                                            </div>
-                                        </div> 
-                                    </div>
-
-                            ))}
-
-
-                            </div>
-                            <div className="row mt-3 mb-3 d-flex button-wrap justify-content-center">
-                                <button className="btn-add col-3 mx-2" onClick={handleLoadMore} disabled={loading}>Load More</button>
-                            </div>
-                        </div>
-                    </TabPanel>
-                    <TabPanel>
-
-                        <div className="container">
-                            <div className="row justify-content-center job-contents d-flex">
-                                <div className="heading-container">
-                                    <h2 className="heading">Liquer</h2>
-                                    <div className="heading-line"></div>
-                                </div>  
-                            {products.filter(p => p.category === 'liquer').map (p => (        
-                                        <div key={p.id} className="product-wrap box col-xl-2 col-lg-3 col-md-3 col-sm-5 col-10">          
-                                        <img src={images[p.id]} className="card-img-top rounded" style={{maxWidth:'100%'}}></img> 
-                                        {p.discount && (
-                                            <div class="text">-{calculateDiscountPercentage(p.price, p.discount)}%</div>
-                                        )}
-                                        <div class="card-body">
-                                            <div class="desc-wrap mb-3">
-
-                                                <div class="desc-wrap mb-3">
-                                                    <p class="font-weight-bold">{p.name} <span>{p.volume}</span></p>   
-                                                
-                                                    {
-                                                        p.discount ? (
-                                                            <div class="d-flex discount-wrap">
-                                                                <p class="strike-through">{p.price}<span> UGX </span></p> 
-                                                                <p>{calculateDiscount(p.price, p.discount)}<span> UGX </span></p> 
-                                                            </div>
-
-
-                                                        ) : (
-                                                            <p class="no-discount">{p.price}<span> UGX </span></p> 
-                
-                                            
-                                                    )}
-                                                </div>
-                                            </div>
-
-                                            <div class="action-btns">
-                                                <button className="action" onClick={()=>handleAddToCart(p)}>
-                                                    <ShoppingCartIcon className="icon-f" />
-
-                                                </button>
-
-                                                <Link to={`https://wa.me/?text=${productDetailLink(p.id)}`} className="action">
-
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
-                                                        <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
-                                                    </svg>
-                                                </Link>
-                                                <Link to={`/product/detail/${p.id}`} className="action">
-                                                    <EyeIcon className="icon-f w-5 h-5" />
-
-                                                </Link>
-
-                                            </div>
-                                        </div> 
-                                    </div>
-
-                            ))}
-
-
-                            </div>
-                            <div className="row mt-3 mb-3 d-flex button-wrap justify-content-center">
-                                <button className="btn-add col-3 mx-2" onClick={handleLoadMore} disabled={loading}>Load More</button>
-                            </div>
                         </div>
                     </TabPanel>
                 </Tabs>

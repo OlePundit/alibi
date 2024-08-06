@@ -15,6 +15,23 @@ import AdminProducts from './views/adminproducts.jsx';
 import UserForm from './views/userform.jsx';
 import UserUpdate from './views/userupdate.jsx';
 import Contact from './views/contact.jsx';
+import Wine from './views/wine.jsx';
+import Vodka from './views/vodka.jsx';
+import Whisky from './views/whisky.jsx';
+import Mixers from './views/mixers.jsx';
+import Gin from './views/gin.jsx';
+import Spirit from './views/spirit.jsx';
+import Cognac from './views/cognac.jsx';
+import Brandy from './views/brandy.jsx';
+import Rum from './views/rum.jsx';
+import Liquer from './views/liqeur.jsx';
+import Beer from './views/beer.jsx';
+import Bourbon from './views/bourbon.jsx';
+import RedWine from './views/redwine.jsx';
+import WhiteWine from './views/white_wine.jsx';
+import Scotch from './views/scotch.jsx';
+import SingleMalt from './views/singlemalt.jsx';
+
 
 const router = createBrowserRouter([
     {
@@ -74,6 +91,77 @@ const router = createBrowserRouter([
                   path: '/products',
                   element: <Products />
                 },
+                {
+                  path: '/products/wine',
+                  element: <Wine />,
+                },
+                {
+                  path: '/products/wine/red_wine',
+                  element: <RedWine />
+                },
+                {
+                  path: '/products/wine/white_wine',
+                  element: <WhiteWine />
+                },
+          
+            
+                {
+                  path: '/products/vodka',
+                  element: <Vodka />
+                },
+                {
+                  path: '/products/whisky',
+                  element: <Whisky />,
+                },
+                {
+                  path: '/products/whisky/bourbon',
+                  element: <Bourbon />
+                },
+                {
+                  path: '/products/whisky/scotch',
+                  element: <Scotch />
+                },
+                {
+                  path: '/products/whisky/singlemalt',
+                  element: <SingleMalt />
+                },
+               
+      
+                {
+                  path: '/products/mixers',
+                  element: <Mixers />
+                },
+                {
+                  path: '/products/beer',
+                  element: <Beer />
+                },
+                {
+                  path: '/products/gin',
+                  element: <Gin />
+                },
+
+                {
+                  path: '/products/spirit',
+                  element: <Spirit />
+                },
+                {
+                  path: '/products/cognac',
+                  element: <Cognac />
+                },
+                {
+                  path: '/products/rum',
+                  element: <Rum />
+                },
+                {
+                  path: '/products/brandy',
+                  element: <Brandy />
+                },
+                {
+                  path: '/products/liqeur',
+                  element: <Liquer />
+                },
+
+
                 {
                   path: '/contact',
                   element: <Contact />
