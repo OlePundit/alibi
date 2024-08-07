@@ -32,6 +32,7 @@ import WhiteWine from './views/white_wine.jsx';
 import Scotch from './views/scotch.jsx';
 import SingleMalt from './views/singlemalt.jsx';
 import AllProducts from './views/allproducts.jsx';
+import UpdateOrder from './views/updateorder.jsx';
 
 const router = createBrowserRouter([
     {
@@ -53,6 +54,10 @@ const router = createBrowserRouter([
           {
             path: '/admin/product/:id',
             element: <ProductForm key="productUpdate"/>
+          },
+          {
+            path: '/admin/order/:id',
+            element: <UpdateOrder />
           },
           {
             path: '/admin/users',

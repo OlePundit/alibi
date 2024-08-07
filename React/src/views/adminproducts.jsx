@@ -26,7 +26,7 @@ export default function AdminProducts(){
         }
     };
     const onDelete = (p) => {
-        if (window.confirm("Are you sure you want to delete this user?")) {
+        if (window.confirm("Are you sure you want to delete this product?")) {
             axiosClient.delete(`/products/${p.id}`)
                 .then(() => {
                     getUsers();
@@ -38,7 +38,7 @@ export default function AdminProducts(){
     };
     const getProducts = () => {
         setLoading(true);
-        axiosClient.get(`/products?page=${currentPage}`)
+        axiosClient.get(`/products?isAdmin=true&page=${currentPage}`)
             .then(({ data }) => {
                 setLoading(false);
                 console.log(data);

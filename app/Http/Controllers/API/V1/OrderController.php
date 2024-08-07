@@ -2,10 +2,16 @@
 
 namespace App\Http\Controllers\API\V1;
 
+use App\Http\Controllers\Controller;
+
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
 use App\Models\Order;
 use App\Http\Resources\V1\OrderCollection;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\V1\OrderResource;
+use Illuminate\Http\Request;
+use App\Models\Product;
 
 class OrderController extends Controller
 {
@@ -17,10 +23,27 @@ class OrderController extends Controller
         $this->order = $order;
         $this->authorizeResource(Order::class, 'order');
     }
-    public function index()
+    public function index(Request $request)
     {
-        return new OrderCollection(Order::paginate());
+        $query = Order::query();
+
+        $includeProducts = $request->query('includeProducts');
+        if ($includeProducts) {
+            $orders = $query->get();
+            foreach ($orders as $order) {
+                if (is_array($order->product_id)) {
+                    $products = Product::whereIn('id', $order->product_id)
+                        ->select('id', 'name', 'volume')
+                        ->get();
+                    $order->products = $products;
+                }
+            }
+            return new OrderCollection($orders);
+        }
+
+        return new OrderCollection($query->paginate());
     }
+    
 
     /**
      * Show the form for creating a new resource.
@@ -35,7 +58,16 @@ class OrderController extends Controller
      */
     public function store(StoreOrderRequest $request)
     {
-        return new OrderResource(Order::create($request->all()));
+        // Check if the request is authenticated
+        if (!Auth::check()) {
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        }
+        $user = Auth::user();
+        $orderData = $request->all();
+        $orderData['user_id'] = $user->id;
+        $order = Order::create($orderData);
+
+        return new OrderResource($order);
     }
 
     /**
@@ -59,7 +91,7 @@ class OrderController extends Controller
      */
     public function update(UpdateOrderRequest $request, Order $order)
     {
-        $order->update($request->all())
+        $order->update($request->all());
     }
 
     /**
@@ -67,6 +99,8 @@ class OrderController extends Controller
      */
     public function destroy(Order $order)
     {
-        //
+        $order->delete();
+
+        return response("", 204);
     }
 }

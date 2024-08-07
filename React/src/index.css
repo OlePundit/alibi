@@ -24,9 +24,20 @@ body {
     color: #212121;
     background:rgba(202, 240, 248, 0.5);
 }
-
+.navbar{
+    background:#00a762;
+    color:#fff;
+}
+.navbar .navbar-nav .nav-link{
+    color: #fff!important;
+}
 .navbar-nav form{
     width:100%;
+}
+.navbar .icon-f{
+    width:30px;
+    color:#fff;
+
 }
 .navbar .navbar-brand img{
     width:100px;
@@ -300,14 +311,14 @@ table > tbody > tr > td {
     border-radius: 8px;
     padding:10px;
 }
-.products .categories li{
-  text-align: start;
-  font-family: 'Lato', 'Open Sans', sans-serif;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
-  margin:10px;
-  padding: 3px 10px;
-  border-radius: 12px;
-
+.products .categories li {
+    text-align: start;
+    font-family: 'Lato', 'Open Sans', sans-serif;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    padding: 3px 12px;
+    border-radius: 12px;
+    background: rgba(0, 167, 98, 0.2);
 }
 .products .categories .dropdown-menu li{
     text-align: start;
@@ -1283,7 +1294,13 @@ input[type="range"] {
     display: flex;
     justify-content: center;
 }
-
+.admin-products .mil-tab ul{
+    list-style-type: none;
+    padding-left: 0;
+}
+.admin-products .mil-tab ul li{
+    text-align: start;
+}
 
 .footer-section{
     padding-top: 100px;
@@ -1445,6 +1462,7 @@ Responsiveness
         display: flex;
         justify-content: center;
     }
+
     .admin-products .products table tbody .actions .btn-edit{
         font-size: 0.3rem;
         display: flex;
@@ -1491,6 +1509,9 @@ Responsiveness
     }
     .products .liquor-3{
         display:none;
+    }
+    .navbar-nav .nav-item{
+        justify-content: center;
     }
 }
 @media(min-width:281px) and (max-width:450px){
@@ -1606,6 +1627,9 @@ Responsiveness
         max-width: 150px;
         margin-right: 10px;
     }
+    .navbar-nav .nav-item{
+        justify-content: center;
+    }
     .product-detail img{
         margin-bottom: 15px;
     }
@@ -1663,6 +1687,9 @@ Responsiveness
     }
     .product-detail .btn-add{
         margin-bottom: 10px;
+    }
+    .navbar-nav .nav-item{
+        justify-content: center;
     }
     .cart {
         width: 60%;

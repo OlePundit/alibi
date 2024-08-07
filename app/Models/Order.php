@@ -9,10 +9,15 @@ class Order extends Model
 {
     protected $guarded = [];
 
-    public function product()
+    protected $casts = [
+        'product_id' => 'array', // Assuming 'product_id' is a JSON array
+    ];
+
+    public function products()
     {
-        return $this->belongsTo(Product::class);
+        return $this->hasMany(Product::class, 'id', 'product_id');
     }
+
     public function user()
     {
         return $this->belongsTo(User::class);

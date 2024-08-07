@@ -7,6 +7,7 @@ use App\Http\Controllers\API\V1\AuthController;
 use App\Http\Resources\V1\UserResource;
 use App\Http\Controllers\API\ProposalNotificationsController;
 use App\Http\Controllers\API\V1\ImageController;
+use App\Http\Controllers\API\V1\OrderController;
 
 
 /*
@@ -32,6 +33,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('/products', [ProductController::class, 'store']);
     Route::put('/products/{product}', [ProductController::class, 'update']);
     Route::delete('/products/{product}', [ProductController::class, 'destroy']);
+    Route::apiResource('/orders', OrderController::class);
 
 });
 Route::get('/images/{image}', [ImageController::class, 'show'])->name('image.show');

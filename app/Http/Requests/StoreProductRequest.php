@@ -31,7 +31,7 @@ class StoreProductRequest extends FormRequest
             'sub_category'=>'',
             'description'=>'required',
             'discount'=>'',
-            'alcohol'=>'',
+            'alcohol'=>'required',
             'image'=>['required','file'],
             'user_id'=>''
         ];

@@ -112,7 +112,7 @@ export default function Index() {
     return (
         <div id="app">
             
-            <nav className="navbar navbar-expand-md navbar-light bg-light shadow-sm">
+            <nav className="navbar navbar-expand-md navbar-light shadow-sm">
                 <div className="container">
                     <Link className="navbar-brand" to="/">
                         <img src={logo} alt="" width="50" height="36" className="d-inline-block align-text-top" />
@@ -583,7 +583,7 @@ export default function Index() {
                         <p>If you have any questions or concerns about this privacy policy, please contact us at:</p>
                         <ul>
                             <li><strong>Email:</strong> <Link to="mailto:info@thealibi-deliveries.com">info@thealibi-deliveries.com</Link></li>
-                            <li><strong>Phone:</strong> +254795692707</li>
+                            <li><strong>Phone:</strong> +256780385216</li>
                             <li><strong>Address:</strong> Kampala</li>
                         </ul>
 

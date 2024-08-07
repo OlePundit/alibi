@@ -25,6 +25,15 @@ class StoreOrderRequest extends FormRequest
             'user_id' => 'required',
             'product_id' => 'required',   
             'status'=>'required',
+            'phone'=>'required',
+            'location'=>'required',
+            'landmark'=>'required',
+            'cash'=>'',
+            'airtel'=>'',
+            'momo'=>'',
+            'credit'=>'',
+            'instructions'=>'',
+
         ];
     }
 }

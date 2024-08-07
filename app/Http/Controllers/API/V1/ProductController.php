@@ -27,7 +27,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $query = Product::query();
-
+    
         // Filter by price range
         $minPrice = $request->query('minPrice');
         $maxPrice = $request->query('maxPrice');
@@ -36,62 +36,70 @@ class ProductController extends Controller
             $maxPrice = (int)$maxPrice;
             $query->whereBetween('price', [$minPrice, $maxPrice]);
         }
-
+    
+        // Filter by volume range
         $minVolume = $request->query('minVolume');
         $maxVolume = $request->query('maxVolume');
         if (is_numeric($minVolume) && is_numeric($maxVolume)) {
             $minVolume = (int)$minVolume;
             $maxVolume = (int)$maxVolume;
-            $query->whereBetween('alcohol', [$minVolume, $maxVolume]);
+            $query->whereBetween('volume', [$minVolume, $maxVolume]);
         }
-
-        // Filter by volume
+    
+        // Filter by specific volume
         $volume = $request->query('volume');
         if ($volume !== null) {
             $query->where('volume', $volume);
         }
-
+    
         // Filter by stock
         $stock = $request->query('stock');
         if ($stock !== null) {
             $query->where('stock', $stock);
         }
-
+    
         // Filter by name
         $name = $request->query('name');
         if ($name !== null) {
             $query->where('name', 'like', '%' . $name . '%'); // Partial match
         }
-
+    
         // Include users if requested
         $includeUsers = $request->query('includeUsers');
         if ($includeUsers) {
             $query->with('user');
         }
-
+    
         // Handle trending products or regular products
         $includeTrending = $request->query('includeTrending');
-        if ($includeTrending) {
-            $query->inRandomOrder()->limit(5);
-            $products = $query->get(); // Directly get the results without pagination
+        $includeWine = $request->query('includeWine');
+    
+        // Check if the user is an admin
+        $isAdmin = $request->query('isAdmin');
+    
+        if ($isAdmin) {
+            $query->orderBy('id', 'asc');
+            $products = $query->paginate(); // Directly get the results with pagination
         } else {
-            // Include wine products if requested
-            $includeWine = $request->query('includeWine');
-            if ($includeWine) {
+            if ($includeTrending) {
+                $query->inRandomOrder()->limit(5);
+                $products = $query->get(); // Directly get the results without pagination
+            } elseif ($includeWine) {
                 $query->where('category', 'wine')->inRandomOrder()->limit(5); // Adjust according to your column name for wine category
                 $products = $query->get(); // Directly get the results without pagination
-
+            } else {
+                $query->inRandomOrder();
+                $products = $query->paginate();
+                $products->appends($request->query()); // Add query parameters to the pagination links
             }
-
-            $products = $query->inRandomOrder()->paginate();
-            $products->appends($request->query()); // Add query parameters to the pagination links
         }
-
+    
         \Log::info('Request data:', $request->query());
         \Log::info('SQL Query:', ['query' => $query->toSql(), 'bindings' => $query->getBindings()]);
-
+    
         return new ProductCollection($products);
     }
+    
 
     
 

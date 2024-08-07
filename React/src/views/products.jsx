@@ -300,6 +300,9 @@ export default function Products(){
                                                 <option value="350ml">350  ml</option>
                                                 <option value="250ml">250  ml</option>
                                             </select>
+
+                                            <label className="mt-3">Filter By Alcohol volume</label>
+
                                             <ReactSlider
                                                 defaultValue={[0, 100]}
                                                 min={0}
@@ -326,6 +329,8 @@ export default function Products(){
                                                 <div>Stop volume: {volumeValue[1]}%</div>
                                             </div>
                                             <br />
+                                            <hr>
+                                            </hr>
                                             <label className="mt-3 mb-3">Filter By Payment frequency</label>
 
                                             <select value={product.stock} onChange={ev => setProduct({...product, stock: ev.target.value})} className="mb-3 form-control">
@@ -343,7 +348,9 @@ export default function Products(){
                     </div>
 
                     <div>
+                        
                         {filtrations && filtrations.length > 0 ? (
+                        <div className="container">
                             <div className="row justify-content-center job-contents d-flex">
                                 <div className="heading-container">
                                     <h2 className="heading">Results</h2>
@@ -358,7 +365,7 @@ export default function Products(){
                                         <div class="card-body">
                                             <div class="desc-wrap mb-3">
 
-                                                <h6>Alc {p.alcohol}%</h6>
+                                                <h6>Alc {f.alcohol}%</h6>
 
                                                 <p class="font-weight-bold">{f.name} <span>{f.volume}</span></p>   
                                             
@@ -382,7 +389,7 @@ export default function Products(){
 
                                             </button>
 
-                                            <Link to={`https://wa.me/?text=${productDetailLink(f.id)}`} className="action">
+                                                 <Link to={`https://wa.me/+256780385216?text=${productDetailLink(f.id)}`} className="action">
 
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
                                                         <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
@@ -399,6 +406,9 @@ export default function Products(){
 
                                 ))} 
                             </div>
+
+                        </div>
+
                         ):(
                             <div>
                                 <div className="container">
@@ -421,28 +431,32 @@ export default function Products(){
                                                 <div class="text">-{calculateDiscountPercentage(t.price, t.discount)}%</div>
                                             )}
                                             <div class="card-body">
-                                                <p class="font-weight-bold">{t.name} <span>{t.volume}</span></p>   
+                                                <div class="desc-wrap mb-3">
+
+                                                    <h6>Alc {t.alcohol}%</h6>
+                                                    <p class="font-weight-bold">{t.name} <span>{t.volume}</span></p>   
+                                                
+                                                    {
+                                                        t.discount ? (
+                                                            <div class="d-flex discount-wrap">
+                                                                <p class="strike-through">{t.price}<span> KSH </span></p> 
+                                                                <p>{calculateDiscount(t.price, t.discount)}<span> KSH </span></p> 
+                                                            </div>
+
+
+                                                        ) : (
+                                                            <p>{t.price}<span> KSH </span></p> 
+                
                                             
-                                                {
-                                                    t.discount ? (
-                                                        <div class="d-flex discount-wrap">
-                                                            <p class="strike-through">{t.price}<span> KSH </span></p> 
-                                                            <p>{calculateDiscount(t.price, t.discount)}<span> KSH </span></p> 
-                                                        </div>
-
-
-                                                    ) : (
-                                                        <p>{t.price}<span> KSH </span></p> 
-            
-                                        
-                                                )}
+                                                    )}
+                                                </div>
                                                 <div class="action-btns">
                                                 <button className="action" onClick={()=>handleAddToCart(t)}>
                                                     <ShoppingCartIcon className="icon-f" />
 
                                                 </button>
 
-                                                <Link to={`https://wa.me/?text=${productDetailLink(t.id)}`} className="action">
+                                                <Link to={`https://wa.me/+256780385216?text=${productDetailLink(t.id)}`} className="action">
 
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
                                                             <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
@@ -544,28 +558,32 @@ export default function Products(){
                                                     <div class="text">-{calculateDiscountPercentage(w.price, w.discount)}%</div>
                                                 )}
                                                 <div class="card-body">
-                                                    <p class="font-weight-bold">{w.name} <span>{w.volume}</span></p>   
+                                                    <div class="desc-wrap mb-3">
+
+                                                        <h6>Alc {w.alcohol}%</h6>
+                                                        <p class="font-weight-bold">{w.name} <span>{w.volume}</span></p>   
+                                                    
+                                                        {
+                                                            w.discount ? (
+                                                                <div class="d-flex discount-wrap">
+                                                                    <p class="strike-through">{w.price}<span> KSH </span></p> 
+                                                                    <p>{calculateDiscount(w.price, w.discount)}<span> KSH </span></p> 
+                                                                </div>
+
+
+                                                            ) : (
+                                                                <p>{w.price}<span> KSH </span></p> 
+                    
                                                 
-                                                    {
-                                                        w.discount ? (
-                                                            <div class="d-flex discount-wrap">
-                                                                <p class="strike-through">{w.price}<span> KSH </span></p> 
-                                                                <p>{calculateDiscount(w.price, w.discount)}<span> KSH </span></p> 
-                                                            </div>
-
-
-                                                        ) : (
-                                                            <p>{w.price}<span> KSH </span></p> 
-                
-                                            
-                                                    )}
+                                                        )}
+                                                    </div>
                                                     <div class="action-btns">
                                                     <button className="action" onClick={()=>handleAddToCart(w)}>
                                                     <ShoppingCartIcon className="icon-f" />
 
                                                     </button>
 
-                                                    <Link to={`https://wa.me/?text=${productDetailLink(w.id)}`} className="action">
+                                                    <Link to={`https://wa.me/+256780385216?text=${productDetailLink(w.id)}`} className="action">
 
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
                                                                 <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
@@ -708,7 +726,7 @@ export default function Products(){
 
                                                     </button>
 
-                                                    <Link to={`https://wa.me/?text=${productDetailLink(p.id)}`} className="action">
+                                                    <Link to={`https://wa.me/+256780385216?text=${productDetailLink(p.id)}`} className="action">
 
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
                                                                 <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
