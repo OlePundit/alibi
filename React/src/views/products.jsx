@@ -45,6 +45,9 @@ export default function Products(){
     const [currentPage, setCurrentPage] = useState(1); // Move currentPage state outside PaginationComponent
     const [loading, setLoading] = useState(false);
     const [images, setImages] = useState({}); // State to store user images
+    const [priceValue, setPriceValue] = useState([0, 100000]);
+    const [volumeValue, setVolumeValue] = useState([0, 100]);
+
 
     const settings = {
         dots: true,
@@ -173,7 +176,7 @@ export default function Products(){
     };
     const onSubmit = ev => {
         ev.preventDefault()
-        axiosClient.get(`/products?includeUsers=true&page=${currentPage}&minPrice=${value[0]}&maxPrice=${value[1]}&volume=${product.volume}&stock=${product.stock}`)
+        axiosClient.get(`/products?includeUsers=true&page=${currentPage}&minPrice=${priceValue[0]}&maxPrice=${priceValue[1]}&minVolume=${volumeValue[0]}&maxVolume=${volumeValue[1]}&volume=${product.volume}&stock=${product.stock}`)
         .then(({data})=>{
             setLoading(false);
             setFiltrations(prevProducts => [...prevProducts, ...data.data]); // Append new products
@@ -256,25 +259,25 @@ export default function Products(){
                                         <label className="mt-3">Filter By Price</label>
                                         <form onSubmit={onSubmit} encType="multipart/form-data">
                                             <ReactSlider
-                                            defaultValue={[0, 100000]}
-                                            min={0}
-                                            max={100000}
-                                            className="horizontal-slider"
-                                            thumbClassName="example-thumb"
-                                            trackClassName="example-track"
-                                            onBeforeChange={(value, index) =>
-                                                console.log(`onBeforeChange: ${JSON.stringify({ value, index })}`)
-                                            }
-                                            onAfterChange={(value, index) =>
-                                                console.log(`onAfterChange: ${JSON.stringify({ value, index })}`)
-                                            }
-                                            ariaLabel={['Lower thumb', 'Upper thumb']}
-                                            ariaValuetext={state => `Thumb value ${state.valueNow}`}
-                                            renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
-                                            pearling
-                                            minDistance={10}
-                                            onChange={(value,index)=>setValue(value)}
-                                            thumbActiveClassName="active"
+                                                defaultValue={[0, 100000]}
+                                                min={0}
+                                                max={100000}
+                                                className="horizontal-slider"
+                                                thumbClassName="example-thumb"
+                                                trackClassName="example-track"
+                                                onBeforeChange={(value, index) =>
+                                                    console.log(`onBeforeChange: ${JSON.stringify({ value, index })}`)
+                                                }
+                                                onAfterChange={(value, index) =>
+                                                    console.log(`onAfterChange: ${JSON.stringify({ value, index })}`)
+                                                }
+                                                ariaLabel={['Lower thumb', 'Upper thumb']}
+                                                ariaValuetext={state => `Thumb value ${state.valueNow}`}
+                                                renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
+                                                pearling
+                                                minDistance={10}
+                                                onChange={(value, index) => setPriceValue(value)}
+                                                thumbActiveClassName="active"
                                             />
 
                                             
@@ -297,6 +300,32 @@ export default function Products(){
                                                 <option value="350ml">350  ml</option>
                                                 <option value="250ml">250  ml</option>
                                             </select>
+                                            <ReactSlider
+                                                defaultValue={[0, 100]}
+                                                min={0}
+                                                max={100}
+                                                className="horizontal-slider"
+                                                thumbClassName="example-thumb"
+                                                trackClassName="example-track"
+                                                onBeforeChange={(value, index) =>
+                                                    console.log(`onBeforeChange: ${JSON.stringify({ value, index })}`)
+                                                }
+                                                onAfterChange={(value, index) =>
+                                                    console.log(`onAfterChange: ${JSON.stringify({ value, index })}`)
+                                                }
+                                                ariaLabel={['Lower thumb', 'Upper thumb']}
+                                                ariaValuetext={state => `Thumb value ${state.valueNow}`}
+                                                renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
+                                                pearling
+                                                minDistance={1}
+                                                onChange={(value, index) => setVolumeValue(value)}
+                                                thumbActiveClassName="active"
+                                            />
+                                            <div className="start">
+                                                <div className="starting">Starting volume: {volumeValue[0]}%</div>
+                                                <div>Stop volume: {volumeValue[1]}%</div>
+                                            </div>
+                                            <br />
                                             <label className="mt-3 mb-3">Filter By Payment frequency</label>
 
                                             <select value={product.stock} onChange={ev => setProduct({...product, stock: ev.target.value})} className="mb-3 form-control">

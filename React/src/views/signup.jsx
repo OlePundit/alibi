@@ -50,12 +50,12 @@ export default function Signup(){
                                 }
                             </div>
                         }
-                        <input ref={nameRef} type="text" placeholder="Full Name"/>                        
-                        <input ref={emailRef} type="email" placeholder="Email Address"/>
-                        <input ref={passwordRef} type="password" placeholder="Password"/>
-                        <input ref={passwordConfirmationRef} type="password" placeholder="Password confirmation"/>
+                        <input className="form-control mb-3" ref={nameRef} type="text" placeholder="Full Name"/>                        
+                        <input className="form-control mb-3" ref={emailRef} type="email" placeholder="Email Address"/>
+                        <input className="form-control mb-3" ref={passwordRef} type="password" placeholder="Password"/>
+                        <input className="form-control mb-3" ref={passwordConfirmationRef} type="password" placeholder="Password confirmation"/>
 
-                        <button className="btn btn-block">Signup</button>
+                        <button className="btn-add mb-3">Signup</button>
                         <p>
                             Already Registered? <Link to="/login">Sign in</Link>
                         </p>

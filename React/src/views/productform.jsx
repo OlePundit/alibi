@@ -20,7 +20,8 @@ export default function ProductForm(){
         image:"",
         discount:"",
         wineType:"",
-        whiskyType:""
+        whiskyType:"",
+        alcohol:""
       });
       const [errors, setErrors] = useState(null);
       const [loading, setLoading] = useState(false);
@@ -90,6 +91,8 @@ export default function ProductForm(){
         formData.append('category', product.category);
         formData.append('discount', product.discount);
         formData.append('image', product.image);
+        formData.append('alcohol', product.alcohol);
+
         // Append category-specific sub-category
         if (product.category === 'wine') {
             formData.append('sub_category', product.wineType);
@@ -229,6 +232,12 @@ export default function ProductForm(){
                 onChange={(ev) => setProduct({ ...product, price: ev.target.value })}
                 value={product.price}
                 placeholder="Price"
+                className="form-control mb-3"
+                ></input>
+                <input
+                onChange={(ev) => setProduct({ ...product, alcohol: ev.target.value })}
+                value={product.alcohol}
+                placeholder="alcohol volume"
                 className="form-control mb-3"
                 ></input>
                 <input

@@ -56,9 +56,9 @@ export default function Login(){
                             }
                         </div>
                     }
-                    <input ref={emailRef} type="email" placeholder="Email"/>
-                    <input ref={passwordRef} type="password" placeholder="Password"/>
-                    <button className="btn btn-block">Login</button>
+                    <input className="form-control mb-3" ref={emailRef} type="email" placeholder="Email"/>
+                    <input className="form-control mb-3" ref={passwordRef} type="password" placeholder="Password"/>
+                    <button className="btn-add mb-3">Login</button>
                     <p>
                         Not Registered? <Link to="/signup">Create account</Link>
                     </p>

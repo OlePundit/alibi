@@ -31,7 +31,7 @@ import RedWine from './views/redwine.jsx';
 import WhiteWine from './views/white_wine.jsx';
 import Scotch from './views/scotch.jsx';
 import SingleMalt from './views/singlemalt.jsx';
-
+import AllProducts from './views/allproducts.jsx';
 
 const router = createBrowserRouter([
     {
@@ -90,6 +90,10 @@ const router = createBrowserRouter([
                 {
                   path: '/products',
                   element: <Products />
+                },
+                {
+                  path: '/products/all',
+                  element: <AllProducts />
                 },
                 {
                   path: '/products/wine',

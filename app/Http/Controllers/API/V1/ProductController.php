@@ -37,6 +37,14 @@ class ProductController extends Controller
             $query->whereBetween('price', [$minPrice, $maxPrice]);
         }
 
+        $minVolume = $request->query('minVolume');
+        $maxVolume = $request->query('maxVolume');
+        if (is_numeric($minVolume) && is_numeric($maxVolume)) {
+            $minVolume = (int)$minVolume;
+            $maxVolume = (int)$maxVolume;
+            $query->whereBetween('alcohol', [$minVolume, $maxVolume]);
+        }
+
         // Filter by volume
         $volume = $request->query('volume');
         if ($volume !== null) {

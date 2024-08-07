@@ -192,11 +192,15 @@ table > tbody > tr > td {
     padding: 34px;
     box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.1);
 }
-
+.login-signup-form .form button{
+    width: 100%;
+}
 .login-signup-form .title {
     font-size: 20px;
     margin-bottom: 1rem;
     text-align: center;
+    font-family: 'Lato', 'Open Sans', sans-serif;
+
 }
 
 .login-signup-form .form .message {
@@ -969,7 +973,7 @@ input[type="range"] {
     height: .4rem;
 }
 .horizontal-slider {
-    width: 100%;
+    width: 85%;
     max-width: 500px;
     height: 50px;
 }
