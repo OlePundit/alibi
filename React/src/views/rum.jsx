@@ -64,6 +64,9 @@ export default function Wine(){
     const calculateDiscount = (price, discount) => {
         return price - discount;
     };
+    const handleLoadMore = () => {
+        setCurrentPage(prevPage => prevPage + 1);
+    };
     return (
         <div className="products container py-5">
             <div className="row justify-content-center job-contents d-flex">

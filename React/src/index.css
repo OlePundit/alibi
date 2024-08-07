@@ -385,7 +385,12 @@ table > tbody > tr > td {
     font-family: 'Lato', 'Open Sans', sans-serif;
 
 }
-.products .categories-wrap a:hover{
+.products .categories-wrap a h4{
+    color:#000;
+    font-family: 'Lato', 'Open Sans', sans-serif;
+    font-size:18px;
+}
+.products .categories-wrap a:hover h4{
     color:#00a762;
 }
 .products .action-btns{
@@ -414,9 +419,10 @@ table > tbody > tr > td {
 
     color:#d1001f!important;
 }
-.products .img-wrap{
-    height:250px;
-    width:250px;
+.products .img-wrap {
+    height: 200px;
+    width: 200px;
+    margin-bottom: 50px;
 }
 .products .img-container{
     border-radius: 50%;

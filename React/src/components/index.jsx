@@ -114,9 +114,9 @@ export default function Index() {
             
             <nav className="navbar navbar-expand-md navbar-light bg-light shadow-sm">
                 <div className="container">
-                    <a className="navbar-brand" href="#">
+                    <Link className="navbar-brand" to="/">
                         <img src={logo} alt="" width="50" height="36" className="d-inline-block align-text-top" />
-                    </a>
+                    </Link>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>
                     </button>

@@ -20,6 +20,9 @@ import rum from '../assets/rum.png';
 import brandy from '../assets/brandy.png';
 import liqeur from '../assets/liqeur.png';
 import whisky from '../assets/whisky.png';
+import mixers from '../assets/mixer.png';
+
+import cognac from '../assets/cognac.png';
 import ReactSlider from 'react-slider';
 import { ShoppingCartIcon, EyeIcon, BoltIcon, LockClosedIcon, CurrencyDollarIcon, ChevronDoubleRightIcon,ChevronDownIcon } from "@heroicons/react/24/outline";
 import { useCart } from '../contexts/cartContext.jsx';
@@ -445,6 +448,15 @@ export default function Products(){
                                                     <h4>Beer</h4>
                                                 </Link>
                                             </div>
+                                            <div className="img-wrap">
+                                                <Link to="/products/cognac">
+                                                    <div className="img-container">
+                                                        <img className="rounded-circle" src={cognac}></img>
+
+                                                    </div>
+                                                    <h4>cognac</h4>
+                                                </Link>
+                                            </div>
 
                                         </div>
                                     </div>
@@ -561,6 +573,15 @@ export default function Products(){
 
                                                     </div>
                                                     <h4>Liqeur</h4>
+                                                </Link>
+                                            </div>
+                                            <div className="img-wrap">
+                                                <Link to="/products/cognac">
+                                                    <div className="img-container">
+                                                        <img className="rounded-circle" src={mixers}></img>
+
+                                                    </div>
+                                                    <h4>Mixers</h4>
                                                 </Link>
                                             </div>
 
