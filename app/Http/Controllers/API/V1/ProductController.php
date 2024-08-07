@@ -70,7 +70,9 @@ class ProductController extends Controller
             // Include wine products if requested
             $includeWine = $request->query('includeWine');
             if ($includeWine) {
-                $query->where('category', 'wine'); // Adjust according to your column name for wine category
+                $query->where('category', 'wine')->inRandomOrder()->limit(5); // Adjust according to your column name for wine category
+                $products = $query->get(); // Directly get the results without pagination
+
             }
 
             $products = $query->inRandomOrder()->paginate();
