@@ -63,21 +63,19 @@ class OrderController extends Controller
             return response()->json(['message' => 'Unauthenticated'], 401);
         }
     
-        $user = Auth::user();
-        $orderData = $request->except('product_id');
-        $orderData['user_id'] = $user->id;
+        $user = Auth::user();  // Get the authenticated user
+        $orderData = $request->except('product_id'); // Exclude product_id from the main order data
+        $orderData['user_id'] = $user->id;  // Set user_id from the authenticated user
     
         // Create the order
         $order = Order::create($orderData);
     
         // Handle the product IDs
-        $productIds = json_decode($request->input('product_id'), true);
-    
-        // Attach the products to the order
+        $productIds = $request->input('product_id'); // product_id is an array
+        
+        // Attach the products to the order using a pivot table
         if (is_array($productIds)) {
-            foreach ($productIds as $productId) {
-                $order->products()->attach($productId);
-            }
+            $order->products()->attach($productIds);
         }
     
         return new OrderResource($order);
