@@ -70,9 +70,10 @@ class OrderController extends Controller
         // Create the order
         $order = Order::create($orderData);
     
-        // Handle the product IDs
-        $productIds = $request->input('product_id'); // product_id is an array
-        
+        // Decode the JSON string back into an array
+        $productIdsJson = $request->input('product_id'); // This is a JSON string
+        $productIds = json_decode($productIdsJson, true); // Decode JSON to array
+    
         // Attach the products to the order using a pivot table
         if (is_array($productIds)) {
             $order->products()->attach($productIds);
