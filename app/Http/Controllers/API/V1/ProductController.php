@@ -109,7 +109,7 @@ class ProductController extends Controller
             }elseif($includeWhisky){
                 $query->where('category', 'whisky')->inRandomOrder(); // Adjust according to your column name for wine category
                 $products = $query->get(); // Directly get the results without pagination
-            }elseif($includeAllwine){
+            }elseif($includeAllWine){
                 $query->where('category', 'wine')->inRandomOrder(); // Adjust according to your column name for wine category
                 $products = $query->get(); // Directly get the results without pagination
             }elseif($includewWhiteWine){
