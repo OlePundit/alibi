@@ -73,7 +73,23 @@ class ProductController extends Controller
         // Handle trending products or regular products
         $includeTrending = $request->query('includeTrending');
         $includeWine = $request->query('includeWine');
-    
+        $includeVodka = $request->query('includeVodka');
+        $includeWhisky = $request->query('includeWhisky');
+        $includeAllWine = $request->query('includeAllWine');
+        $includeWhiteWine = $request->query('includeWhiteWine');
+        $includeSpirit = $request->query('includeSpirit');
+        $includeSingleMalt = $request->query('includeSingleMalt');
+        $includeScotch = $request->query('includeScotch');
+        $includeRum = $request->query('includeRum');
+        $includeRedWine = $request->query('includeRedWine');
+        $includeMixers = $request->query('includeMixers');
+        $includeLiqeur = $request->query('includeLiqeur');
+        $includeGin = $request->query('includeGin');
+        $includeCognac = $request->query('includeCognac');
+        $includeBrandy = $request->query('includeBrandy');
+        $includeBourbon = $request->query('includeBourbon');
+        $includeBeer = $request->query('includeBeer');
+
         // Check if the user is an admin
         $isAdmin = $request->query('isAdmin');
     
@@ -87,7 +103,56 @@ class ProductController extends Controller
             } elseif ($includeWine) {
                 $query->where('category', 'wine')->inRandomOrder()->limit(5); // Adjust according to your column name for wine category
                 $products = $query->get(); // Directly get the results without pagination
-            } else {
+            }elseif($includeVodka){
+                $query->where('category', 'vodka')->inRandomOrder(); // Adjust according to your column name for wine category
+                $products = $query->get(); // Directly get the results without pagination
+            }elseif($includeWhisky){
+                $query->where('category', 'whisky')->inRandomOrder(); // Adjust according to your column name for wine category
+                $products = $query->get(); // Directly get the results without pagination
+            }elseif($includeAllwine){
+                $query->where('category', 'wine')->inRandomOrder(); // Adjust according to your column name for wine category
+                $products = $query->get(); // Directly get the results without pagination
+            }elseif($includewWhiteWine){
+                $query->where('sub_category', 'white_wine')->inRandomOrder(); // Adjust according to your column name for wine category
+                $products = $query->get(); // Directly get the results without pagination
+            }elseif($includespirit){
+                $query->where('category', 'spirit')->inRandomOrder(); // Adjust according to your column name for wine category
+                $products = $query->get(); // Directly get the results without pagination
+            }elseif($includeSingleMalt){
+                $query->where('sub_category', 'single_malt')->inRandomOrder(); // Adjust according to your column name for wine category
+                $products = $query->get(); // Directly get the results without pagination
+            }elseif($includeScotch){
+                $query->where('sub_category', 'scotch')->inRandomOrder(); // Adjust according to your column name for wine category
+                $products = $query->get(); // Directly get the results without pagination
+            }elseif($includeRum){
+                $query->where('category', 'rum')->inRandomOrder(); // Adjust according to your column name for wine category
+                $products = $query->get(); // Directly get the results without pagination
+            }elseif($includeRedWine){
+                $query->where('sub_category', 'red_whine')->inRandomOrder(); // Adjust according to your column name for wine category
+                $products = $query->get(); // Directly get the results without pagination
+            }elseif($includeMixers){
+                $query->where('category', 'mixers')->inRandomOrder(); // Adjust according to your column name for wine category
+                $products = $query->get(); // Directly get the results without pagination
+            }elseif($includeLiquer){
+                $query->where('category', 'liqeur')->inRandomOrder(); // Adjust according to your column name for wine category
+                $products = $query->get(); // Directly get the results without pagination
+            }elseif($includeGin){
+                $query->where('category', 'gin')->inRandomOrder(); // Adjust according to your column name for wine category
+                $products = $query->get(); // Directly get the results without pagination
+            }elseif($includeCognac){
+                $query->where('category', 'cognac')->inRandomOrder(); // Adjust according to your column name for wine category
+                $products = $query->get(); // Directly get the results without pagination
+            }elseif($includeBrandy){
+                $query->where('category', 'whisky')->inRandomOrder(); // Adjust according to your column name for wine category
+                $products = $query->get(); //brandyDirectly get the results without pagination
+            }elseif($includeBourbon){
+                $query->where('category', 'bourbon')->inRandomOrder(); // Adjust according to your column name for wine category
+                $products = $query->get(); // Directly get the results without pagination
+            }elseif($includeBeer){
+                $query->where('category', 'beer')->inRandomOrder(); // Adjust according to your column name for wine category
+                $products = $query->get(); // Directly get the results without pagination
+            }
+             else {
                 $query->inRandomOrder();
                 $products = $query->paginate();
                 $products->appends($request->query()); // Add query parameters to the pagination links
@@ -209,26 +274,39 @@ class ProductController extends Controller
         return response("", 204);
 
     }
-    public function images($productId)
+    public function images(Request $request)
     {
-        $product = Product::where('id', $productId)->first();
+        \Log::info('Request payload:', $request->all());
 
-        \Log::info('Attempting to retrieve product:', ['product' => $product]);
+        $productIds = $request->input('product_ids', []);
+        \Log::info('These are the ProductIds:', $productIds );
 
-
-        $imagePath = $product->image;
-
-        \Log::info('Attempting to retrieve image:', ['image' => $imagePath]);
-
-        if (!Storage::disk('public')->exists($imagePath)) {
-            \Log::error('File not found:', ['image' => $imagePath]);
-            abort(404, 'File not found'); // Or return a suitable error response
+        if (!is_array($productIds)) {
+            return response()->json(['message' => 'Invalid product IDs'], 400);
         }
-
-        $fileContents = Storage::disk('public')->get($imagePath);
-        // Return the file as a response with the appropriate headers
-        return response($fileContents, 200)
-            ->header('Content-Type', 'image/png')
-            ->header('Content-Disposition', 'attachment; filename="' . basename($imagePath) . '"');
+    
+        $images = [];
+    
+        foreach ($productIds as $productId) {
+            $product = Product::find($productId); // Use find to return null if not found
+    
+            if ($product) {
+                $imagePath = $product->image;
+    
+                if (Storage::disk('public')->exists($imagePath)) {
+                    $fileContents = Storage::disk('public')->get($imagePath);
+                    $base64Image = base64_encode($fileContents);
+                    $images[$productId] = 'data:image/png;base64,' . $base64Image;
+                } else {
+                    $images[$productId] = null;
+                }
+            } else {
+                $images[$productId] = null;
+            }
+        }
+    
+        return response()->json($images);
     }
+    
+
 }

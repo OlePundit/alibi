@@ -142,13 +142,12 @@ export default function Products(){
     }
     const fetchImages = async (productIds) => {
         try {
-            const newImages = {};
-            setLoading(true);
-            for (const productId of productIds) {
-                const response = await axiosClient.get(`/products/${productId}/image`, { responseType: 'blob' });
-                const imageUrl = URL.createObjectURL(response.data);
-                newImages[productId] = imageUrl;
-            }
+            console.log('Sending product IDs:', productIds);
+
+            const response = await axiosClient.post('/products/images', { product_ids: productIds });
+            const newImages = response.data;
+    
+            // Process the images
             setImages(prevImages => ({ ...prevImages, ...newImages }));
             localStorage.setItem('Image', JSON.stringify({ ...images, ...newImages })); // Merge and save images to local storage
         } catch (error) {
@@ -157,6 +156,8 @@ export default function Products(){
             setLoading(false);
         }
     };
+    
+    
     
     const calculateDiscountPercentage = (price, discount) => {
         return Math.round((discount / price) * 100);
@@ -282,8 +283,8 @@ export default function Products(){
 
                                             
                                             <div className="start"> 
-                                                <div className="starting">Starting price: {value[0]}</div>
-                                                <div>Stop price: {value[1]}</div>
+                                                <div className="starting">Starting price: {priceValue[0]}</div>
+                                                <div>Stop price: {priceValue[1]}</div>
                                             </div>
 
                                             <br/>

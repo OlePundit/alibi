@@ -40,4 +40,4 @@ Route::get('/images/{image}', [ImageController::class, 'show'])->name('image.sho
 Route::post('/signup', [AuthController::class, 'signup']);
 Route::post('/login', [AuthController::class, 'login']);    
 Route::apiResource('/users', AuthController::class);
-Route::get('/products/{productId}/image', [ProductController::class, 'images'])->name('product.image');
+Route::post('/products/images', [ProductController::class, 'images'])->name('product.image');

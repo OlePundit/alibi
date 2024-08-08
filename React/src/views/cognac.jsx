@@ -19,7 +19,7 @@ export default function Wine(){
 
     const getProducts = () => {
         setLoading(true);
-        axiosClient.get(`/products?includeUsers=true&page=${currentPage}`)
+        axiosClient.get(`/products?includeUsers=true&includeCognac=true&page=${currentPage}`)
             .then(({ data }) => {
                 setLoading(false);
                 setProducts(prevProducts => [...prevProducts, ...data.data]); // Append new products
@@ -33,13 +33,12 @@ export default function Wine(){
     };
     const fetchImages = async (productIds) => {
         try {
-            const newImages = {};
-            setLoading(true);
-            for (const productId of productIds) {
-                const response = await axiosClient.get(`/products/${productId}/image`, { responseType: 'blob' });
-                const imageUrl = URL.createObjectURL(response.data);
-                newImages[productId] = imageUrl;
-            }
+            console.log('Sending product IDs:', productIds);
+
+            const response = await axiosClient.post('/products/images', { product_ids: productIds });
+            const newImages = response.data;
+    
+            // Process the images
             setImages(prevImages => ({ ...prevImages, ...newImages }));
             localStorage.setItem('Image', JSON.stringify({ ...images, ...newImages })); // Merge and save images to local storage
         } catch (error) {
@@ -75,7 +74,7 @@ export default function Wine(){
                     <div className="heading-line"></div>
                 </div>   
 
-                {products.filter(p => p.category === 'cognac').map (p => (        
+                {products.map(p => (        
                         <div key={p.id} className="product-wrap box col-xl-2 col-lg-3 col-md-3 col-sm-5 col-10">          
                         <img src={images[p.id]} className="card-img-top rounded" style={{maxWidth:'100%'}}></img> 
                         {p.discount && (
