@@ -13,7 +13,6 @@ export default function Checkout(){
     const [order, setOrder] = useState({
         phone: "",
         name: "",
-        phone: "",
         location: "",
         landmark: "",
         cash:"",
