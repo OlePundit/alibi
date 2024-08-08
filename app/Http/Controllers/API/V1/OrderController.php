@@ -64,14 +64,14 @@ class OrderController extends Controller
         }
     
         $user = Auth::user();
-        $orderData = $request->except('product_ids');
+        $orderData = $request->except('product_id');
         $orderData['user_id'] = $user->id;
     
         // Create the order
         $order = Order::create($orderData);
     
         // Handle the product IDs
-        $productIds = json_decode($request->input('product_ids'), true);
+        $productIds = json_decode($request->input('product_id'), true);
     
         // Attach the products to the order
         if (is_array($productIds)) {
