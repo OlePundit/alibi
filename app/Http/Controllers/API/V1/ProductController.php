@@ -112,10 +112,10 @@ class ProductController extends Controller
             }elseif($includeAllWine){
                 $query->where('category', 'wine')->inRandomOrder(); // Adjust according to your column name for wine category
                 $products = $query->get(); // Directly get the results without pagination
-            }elseif($includewWhiteWine){
+            }elseif($includeWhiteWine){
                 $query->where('sub_category', 'white_wine')->inRandomOrder(); // Adjust according to your column name for wine category
                 $products = $query->get(); // Directly get the results without pagination
-            }elseif($includespirit){
+            }elseif($includeSpirit){
                 $query->where('category', 'spirit')->inRandomOrder(); // Adjust according to your column name for wine category
                 $products = $query->get(); // Directly get the results without pagination
             }elseif($includeSingleMalt){
@@ -133,7 +133,7 @@ class ProductController extends Controller
             }elseif($includeMixers){
                 $query->where('category', 'mixers')->inRandomOrder(); // Adjust according to your column name for wine category
                 $products = $query->get(); // Directly get the results without pagination
-            }elseif($includeLiquer){
+            }elseif($includeLiqeur){
                 $query->where('category', 'liqeur')->inRandomOrder(); // Adjust according to your column name for wine category
                 $products = $query->get(); // Directly get the results without pagination
             }elseif($includeGin){

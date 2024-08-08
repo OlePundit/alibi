@@ -140,25 +140,21 @@ export default function ProductDetail(){
     }
     const fetchImages = async (productIds) => {
         try {
-            const images = {};
-            setLoading(true);
-            for (const productId of productIds){
-                const response = await axiosClient.get(`/products/${productId}/image`, { responseType: 'blob' });
-                console.log('product ID:',productId);
-                console.log('Response Data:', response.data);
-                const imageUrl = URL.createObjectURL(response.data);
-                images[productId] = imageUrl;
-            
-            }
-            setImages(images);
-            localStorage.setItem('Image', JSON.stringify(images)); // Save images to local storage
-            console.log('Images:', images);
+            console.log('Sending product IDs:', productIds);
+
+            const response = await axiosClient.post('/products/images', { product_ids: productIds });
+            const newImages = response.data;
+    
+            // Process the images
+            setImages(prevImages => ({ ...prevImages, ...newImages }));
+            localStorage.setItem('Image', JSON.stringify({ ...images, ...newImages })); // Merge and save images to local storage
         } catch (error) {
             console.error("Error fetching images:", error);
         } finally {
             setLoading(false);
         }
     };
+    
     const productDetailLink = (productId)=> {
         const Link = `/product/detail/${productId}`;
         const whatsappMessage = `I am interested in this product: ${window.location.origin}${Link}`;
