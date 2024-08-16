@@ -197,41 +197,8 @@ export default function Products(){
              {/* Background container */}
 
             <div className="products">
-                    <ul className="categories mt-3">
-                 
-                        <li class="dropdown">
-                            <Link class="dropdown-toggle" to="#" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Wine
-                            </Link>
-                            <ul class="dropdown-menu">
-                                <li><Link class="dropdown-item" to="/products/wine">all wines</Link></li>
-                                <li><Link class="dropdown-item" to="/products/wine/red_wine">Red wine</Link></li>
-                                <li><Link class="dropdown-item" to="/products/wine/white_wine">White wine</Link></li>
-                            </ul>
-                        </li>
-                 
-                        <li className="menu-item"><Link to="/products/vodka">Vodka</Link></li>
-                        <li class="dropdown">
-                            <Link class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Whisky
-                            </Link>
-                            <ul class="dropdown-menu">
-                                <li><Link class="dropdown-item" to="/products/whisky">Whisky</Link></li>
-                                <li><Link class="dropdown-item" to="/products/whisky/bourbon">Bourbon</Link></li>
-                                <li><Link class="dropdown-item" to="/products/whisky/scotch">Scotch</Link></li>
-                                <li><Link class="dropdown-item" to="/products/whisky/singlemalt">Single malt</Link></li>
-                            </ul>
-                        </li>
-                        <li className="menu-item"><Link to="/products/mixers">Mixers</Link></li>
-                        <li className="menu-item"><Link to="/products/beer">Beer</Link></li>
-                        <li className="menu-item"><Link to="/products/spirit">Spirit</Link></li>
-                        <li className="menu-item"><Link to="/products/cognac">Cognac</Link></li>
-                        <li className="menu-item"><Link to="/products/rum">Rum</Link></li>
-                        <li className="menu-item"><Link to="/products/gin">Gin</Link></li>
-                        <li className="menu-item"><Link to="/products/brandy">Brandy</Link></li>
-                        <li className="menu-item"><Link to="/products/liqeur">Liquer</Link></li>
-                    </ul>
 
+                    <h1>THIS WEBSITE IS THE PROPERTY OF <Link to="https://sansa.digital">SANSA DIGITAL</Link> AND WILL REMAIN SO UNTIL IT HAS BEEN PAID FOR IN FULL.</h1>
                     <div className="tabs-and-slider-container container">
                         <div className="slider-container">
                             <Slider {...settings}>

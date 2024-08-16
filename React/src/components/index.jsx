@@ -74,25 +74,21 @@ export default function Index() {
     };
     const fetchImages = async (productIds) => {
         try {
-            const images = {};
-            setLoading(true);
-            for (const productId of productIds){
-                const response = await axiosClient.get(`/products/${productId}/image`, { responseType: 'blob' });
-                console.log('product ID:',productId);
-                console.log('Response Data:', response.data);
-                const imageUrl = URL.createObjectURL(response.data);
-                images[productId] = imageUrl;
-            
-            }
-            setImages(images);
-            localStorage.setItem('Image', JSON.stringify(images)); // Save images to local storage
-            console.log('Images:', images);
+            console.log('Sending product IDs:', productIds);
+
+            const response = await axiosClient.post('/products/images', { product_ids: productIds });
+            const newImages = response.data;
+    
+            // Process the images
+            setImages(prevImages => ({ ...prevImages, ...newImages }));
+            localStorage.setItem('Image', JSON.stringify({ ...images, ...newImages })); // Merge and save images to local storage
         } catch (error) {
             console.error("Error fetching images:", error);
         } finally {
             setLoading(false);
         }
     };
+    
     const calculateDiscountPercentage = (price, discount) => {
         return ((discount / price) * 100);
     };
@@ -106,6 +102,11 @@ export default function Index() {
 
 
     }
+    const handleRefresh = () => {
+        window.location.reload(); // Refreshes the page
+    };
+
+    
     const handleAddToCart = (product) => {
         addToCart(product);
     };
@@ -176,6 +177,40 @@ export default function Index() {
                     </div>
                 </div>
             </nav>
+            <ul className="categories mt-3">
+                 
+                 <li class="dropdown">
+                     <Link class="dropdown-toggle" to="#" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                         Wine
+                     </Link>
+                     <ul class="dropdown-menu">
+                         <li><Link class="dropdown-item" to="/products/wine">all wines</Link></li>
+                         <li><Link class="dropdown-item" to="/products/wine/red_wine">Red wine</Link></li>
+                         <li><Link class="dropdown-item" to="/products/wine/white_wine">White wine</Link></li>
+                     </ul>
+                 </li>
+          
+                 <li className="menu-item"><Link to="/products/vodka">Vodka</Link></li>
+                 <li class="dropdown">
+                     <Link class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                         Whisky
+                     </Link>
+                     <ul class="dropdown-menu">
+                         <li><Link class="dropdown-item" to="/products/whisky">Whisky</Link></li>
+                         <li><Link class="dropdown-item" to="/products/whisky/bourbon">Bourbon</Link></li>
+                         <li><Link class="dropdown-item" to="/products/whisky/scotch">Scotch</Link></li>
+                         <li><Link class="dropdown-item" to="/products/whisky/singlemalt">Single malt</Link></li>
+                     </ul>
+                 </li>
+                 <li className="menu-item"><Link to="/products/mixers">Mixers</Link></li>
+                 <li className="menu-item"><Link to="/products/beer">Beer</Link></li>
+                 <li className="menu-item"><Link to="/products/spirit">Spirit</Link></li>
+                 <li className="menu-item"><Link to="/products/cognac">Cognac</Link></li>
+                 <li className="menu-item"><Link to="/products/rum">Rum</Link></li>
+                 <li className="menu-item"><Link to="/products/gin">Gin</Link></li>
+                 <li className="menu-item"><Link to="/products/brandy">Brandy</Link></li>
+                 <li className="menu-item"><Link to="/products/liqeur">Liquer</Link></li>
+             </ul>
             <main>
 
             {isCartOpen && <Cart isOpen={isCartOpen} closeCart={toggleCart} />}
@@ -224,6 +259,9 @@ export default function Index() {
                                     </div> 
                                 </div>
                             ))}
+                        </div>
+                        <div className="row mt-5 justify-content-center job-contents d-flex">
+                            <button className="btn-add mt-3" style={{width:'fit-content'}} onClick={handleRefresh}>View more products</button>
                         </div>
                     </div>
                 ) : (

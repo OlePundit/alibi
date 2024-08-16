@@ -299,7 +299,7 @@ table > tbody > tr > td {
     }
 }
 
-.products .categories{
+.categories{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -311,7 +311,7 @@ table > tbody > tr > td {
     border-radius: 8px;
     padding:10px;
 }
-.products .categories li {
+.categories li {
     text-align: start;
     font-family: 'Lato', 'Open Sans', sans-serif;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
@@ -320,7 +320,7 @@ table > tbody > tr > td {
     border-radius: 12px;
     background: rgba(0, 167, 98, 0.2);
 }
-.products .categories .dropdown-menu li{
+.categories .dropdown-menu li{
     text-align: start;
     font-family: 'Lato', 'Open Sans', sans-serif;
     box-shadow: none;
@@ -329,23 +329,24 @@ table > tbody > tr > td {
     border-radius: 12px;
   
 }
-.products .categories .dropdown-menu .dropdown-item:hover{
+.categories .dropdown-menu .dropdown-item:hover{
     background:none!important;
     color:#00a762;
   
 }
-.products .categories .menu-item:hover,.products .categories .menu-item:hover a,.products .categories .dropdown:hover,.products .categories .dropdown:hover .dropdown-toggle{
+.categories .menu-item:hover,.categories .menu-item:hover a,.categories .dropdown:hover,.categories .dropdown:hover .dropdown-toggle{
     background:#00a762;
     color:#fff!important;
     cursor: pointer;
   
 }
 
-.products .categories li a{
+.categories li a{
     color:#000;
+    text-decoration: none;
   
 }
-.products .categories button{
+.categories button{
     background: none;
     border: none;
 }
